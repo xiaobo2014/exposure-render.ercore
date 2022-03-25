@@ -56,7 +56,16 @@ public:
 		if (!this->Data)
 			return T();
 
-		const float U = Normalized ? X * (float)this->Resolution : X;
+		//const float U = Normalized ? X * float(this->Resolution) : X;
+		float U;
+		if (Normalized)
+		{
+			U = this->Resolution * X;
+		}
+		else
+		{
+			U = X;
+		}
 
 		switch (this->FilterMode)
 		{
