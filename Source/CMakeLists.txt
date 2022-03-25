@@ -34,8 +34,8 @@ FIND_PACKAGE(CUDA)
 # SET(CUDA_NVCC_FLAGS "-gencode=arch=compute_13,code=compute_13;${CUDA_NVCC_FLAGS}")
 
 # Fermi architecture: sm 2.0 and above
-SET(CUDA_NVCC_FLAGS "-gencode=arch=compute_20,code=sm_20;${CUDA_NVCC_FLAGS}")
-SET(CUDA_NVCC_FLAGS "-gencode=arch=compute_20,code=compute_20;${CUDA_NVCC_FLAGS}")
+SET(CUDA_NVCC_FLAGS "-gencode=arch=compute_50,code=sm_50;${CUDA_NVCC_FLAGS}")
+SET(CUDA_NVCC_FLAGS "-gencode=arch=compute_50,code=compute_50;${CUDA_NVCC_FLAGS}")
 # SET(CUDA_NVCC_FLAGS "-gencode=arch=compute_21,code=sm_21;${CUDA_NVCC_FLAGS}")
 # SET(CUDA_NVCC_FLAGS "-gencode=arch=compute_21,code=compute_21;${CUDA_NVCC_FLAGS}")
 
