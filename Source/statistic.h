@@ -128,9 +128,14 @@ public:
 	/*! Resets the statistic */
 	HOST void Reset()
 	{
-		this->SetName("Untitled");
-		this->SetValueFormat("%.2f");
-		this->SetUnit("no unit");
+		std::string tempName = "Untitled";
+		this->SetName(tempName.c_str());
+
+		std::string tempValueFormat = "%.2f";
+		this->SetValueFormat(tempValueFormat.c_str());
+
+		std::string tempUnit = "no unit";
+		this->SetUnit(tempUnit.c_str());
 
 		this->Hysteresis.Reset();
 	}
