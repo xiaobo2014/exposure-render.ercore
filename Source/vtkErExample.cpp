@@ -41,7 +41,8 @@
 #include "vtkErInteractorStyleTrackballCamera.h"
 
 // Specify volume file her (*.mhd)
-char gVolumeFile[] = "C:\\Dropbox\\Work\\Data\\Volumes\\engine.mhd";
+//char gVolumeFile[] = "C:\\Dropbox\\Work\\Data\\Volumes\\engine.mhd";
+char gVolumeFile[] = "D:\\exposure-download\\volumes\\engine.mhd";
 
 //#define BACK_PLANE_ON
 #define KEY_LIGHT_ON
