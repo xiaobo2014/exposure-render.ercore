@@ -59,7 +59,7 @@ public:
 	/*! Free dynamic data owned by the texture */
 	HOST void Free(void)
 	{
-#ifdef __CUDACC__
+#ifdef __CUDACC__SELF
 		Cuda::FreeArray(this->Array);
 #endif
 	}
@@ -83,7 +83,7 @@ public:
 
 		const cudaChannelFormatDesc ChannelFormatDescription = cudaCreateChannelDesc<T>();
 
-#ifdef __CUDACC__
+#ifdef __CUDACC__SELF
 		Cuda::BindTextureToArray(&TextureReference, this->Array, &ChannelFormatDescription);
 #endif
 	}

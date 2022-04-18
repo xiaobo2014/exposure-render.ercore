@@ -94,7 +94,7 @@ public:
 
 				case Enums::Device:
 				{
-#ifdef __CUDACC__
+#ifdef __CUDACC__SELF
 					Cuda::Free(this->Data);
 #endif
 					break;
@@ -123,7 +123,7 @@ public:
 			
 			case Enums::Device:
 			{
-#ifdef __CUDACC__
+#ifdef __CUDACC__SELF
 				Cuda::MemSet(this->Data, 0, this->Resolution.CumulativeProduct());
 #endif
 				break;
@@ -153,7 +153,7 @@ public:
 			this->Data = (T*)malloc(this->GetNoBytes());
 		}
 
-#ifdef __CUDACC__
+#ifdef __CUDACC__SELF
 		if (this->MemoryType == Enums::Device)
 		{
 			Cuda::Allocate(this->Data, this->Resolution.CumulativeProduct());
@@ -189,7 +189,7 @@ public:
 					
 					case Enums::Device:
 					{
-#ifdef __CUDACC__
+#ifdef __CUDACC__SELF
 						Cuda::MemCopyDeviceToHost(Data, this->Data, this->Resolution.CumulativeProduct());
 #endif
 						break;
@@ -205,7 +205,7 @@ public:
 				{
 					case Enums::Host:
 					{
-#ifdef __CUDACC__
+#ifdef __CUDACC__SELF
 						Cuda::MemCopyHostToDevice(Data, this->Data, this->Resolution.CumulativeProduct());
 #endif
 						break;
@@ -213,7 +213,7 @@ public:
 
 					case Enums::Device:
 					{
-#ifdef __CUDACC__
+#ifdef __CUDACC__SELF
 						Cuda::MemCopyDeviceToDevice(Data, this->Data, this->Resolution.CumulativeProduct());
 #endif
 						break;

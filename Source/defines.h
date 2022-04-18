@@ -16,7 +16,8 @@
 
 #pragma once
 
-#ifdef __CUDACC__
+#define  __CUDACC__SELF
+#ifdef __CUDACC__SELF
 	#include <host_defines.h>
 #endif
 
@@ -35,7 +36,7 @@ using namespace std;
 namespace ExposureRender
 {
 
-#ifdef __CUDACC__
+#ifdef __CUDACC__SELF
 	#define KERNEL						__global__
 	#define HOST						__host__
 	#define DEVICE						__device__

@@ -19,7 +19,7 @@
 #include "exception.h"
 #include "log.h"
 
-#ifdef __CUDACC__
+#ifdef __CUDACC__SELF
 
 #include <cuda.h>
 #include <cuda_runtime_api.h>

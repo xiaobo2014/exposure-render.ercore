@@ -65,7 +65,7 @@ public:
 		CopyParams.extent		= CudaExtent;
 		CopyParams.kind			= cudaMemcpyHostToDevice;
 		
-#ifdef __CUDACC__
+#ifdef __CUDACC__SELF
 		Cuda::Memcpy3D(&CopyParams);
 #endif
 
@@ -89,7 +89,7 @@ public:
 		if (NoElementes <= 0)
 			throw (Exception(Enums::Error, "No. elements is zero!"));
 
-#ifdef __CUDACC__
+#ifdef __CUDACC__SELF
 		Cuda::Malloc3DArray(&this->Array, cudaCreateChannelDesc<T>(), this->Resolution);
 #endif
 	}
