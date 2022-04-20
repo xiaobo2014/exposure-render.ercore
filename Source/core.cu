@@ -30,9 +30,17 @@ map<int, int> gClippingObjectsHashMap;
 map<int, int> gTexturesHashMap;
 map<int, int> gBitmapsHashMap;
 
-CONSTANT_DEVICE float gDensityScale			= 0.0f;
-CONSTANT_DEVICE float gStepFactorPrimary	= 0.0f;
-CONSTANT_DEVICE float gStepFactorShadow		= 0.0f;
+//CONSTANT_DEVICE float gDensityScale			= 0.0f;
+//CONSTANT_DEVICE float gStepFactorPrimary	= 0.0f;
+//CONSTANT_DEVICE float gStepFactorShadow		= 0.0f;
+
+CONSTANT_DEVICE float gDensityScale = 10.0f;
+CONSTANT_DEVICE float gStepFactorPrimary = 0.0078125f;
+CONSTANT_DEVICE float gStepFactorShadow = 0.01953125f;
+
+//DEVICE float gDensityScale = 10.0f;
+//DEVICE float gStepFactorPrimary = 0.0078125f;
+//DEVICE float gStepFactorShadow = 0.01953125f;
 
 #include "statistics.h"
 #include "tracer.h"
@@ -121,13 +129,23 @@ EXPOSURE_RENDER_DLL void Render(int TracerID, Statistics& Statistics)
 
 	Tracer& Tracer = gTracers[TracerID];
 
-	const float DensityScale		= Tracer.VolumeProperty.GetDensityScale();
-	const float StepFactorPrimary	= gVolumes[gVolumesHashMap[Tracer.VolumeIDs[0]]].MinStep * Tracer.VolumeProperty.GetStepFactorPrimary();
-	const float StepFactorShadow	= gVolumes[gVolumesHashMap[Tracer.VolumeIDs[0]]].MinStep * Tracer.VolumeProperty.GetStepFactorShadow();
+    //old code
+	//const float DensityScale		= Tracer.VolumeProperty.GetDensityScale();
+	//const float StepFactorPrimary	= gVolumes[gVolumesHashMap[Tracer.VolumeIDs[0]]].MinStep * Tracer.VolumeProperty.GetStepFactorPrimary();
+	//const float StepFactorShadow	= gVolumes[gVolumesHashMap[Tracer.VolumeIDs[0]]].MinStep * Tracer.VolumeProperty.GetStepFactorShadow();
 	
-	Cuda::HostToConstantDevice(&DensityScale, "gDensityScale");
-	Cuda::HostToConstantDevice(&StepFactorPrimary, "gStepFactorPrimary");
-	Cuda::HostToConstantDevice(&StepFactorShadow, "gStepFactorShadow");
+	//Cuda::HostToConstantDevice(&DensityScale, "gDensityScale");
+	//Cuda::HostToConstantDevice(&StepFactorPrimary, "gStepFactorPrimary");
+	//Cuda::HostToConstantDevice(&StepFactorShadow, "gStepFactorShadow");
+
+    //new code
+    float DensityScale = Tracer.VolumeProperty.GetDensityScale();
+    float StepFactorPrimary = gVolumes[gVolumesHashMap[Tracer.VolumeIDs[0]]].MinStep * Tracer.VolumeProperty.GetStepFactorPrimary();
+    float StepFactorShadow = gVolumes[gVolumesHashMap[Tracer.VolumeIDs[0]]].MinStep * Tracer.VolumeProperty.GetStepFactorShadow();
+
+    //Cuda::MemCopyHostToDevice(&DensityScale, &gDensityScale);
+    //Cuda::MemCopyHostToDevice(&StepFactorPrimary, &gStepFactorPrimary);
+    //Cuda::MemCopyHostToDevice(&StepFactorShadow, &gStepFactorShadow);
 	
 	/*
 	if (Tracer.NoEstimates == 0)
