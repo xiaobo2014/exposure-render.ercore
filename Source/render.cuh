@@ -51,7 +51,7 @@ void RemoveRedundantSamples(Tracer& Tracer, int& NoSamples)
 	NoSamples = DevicePtrEnd - DevicePtr;
 }
 
-void Render(Tracer& Tracer, Statistics& Statistics)
+void Render(Tracer& Tracer, Volume& Volume, Object& Object, Texture& Texture, Statistics& Statistics)
 {
 	Tracer.FrameBuffer.DisplayEstimate.Reset();
 
@@ -62,8 +62,8 @@ void Render(Tracer& Tracer, Statistics& Statistics)
 			if (Tracer.NoEstimates > 0)
 				return;
 			
-			Dvr(Tracer, Statistics);
-			GaussianFilterRGBAuc(Statistics, 1, Tracer.FrameBuffer.DVR);
+            Dvr(Tracer, Volume, Statistics);
+            GaussianFilterRGBAuc(Statistics, 1, Tracer.FrameBuffer.DVR, Tracer);
 			BlendRGBAuc(Statistics, Tracer.FrameBuffer.DisplayEstimate, Tracer.FrameBuffer.DVR);
 
 			break;
@@ -71,8 +71,11 @@ void Render(Tracer& Tracer, Statistics& Statistics)
 		
 		case Enums::StochasticRayCasting:
 		{
-			SampleCamera(Tracer, Statistics);
+			SampleCamera(Tracer, Volume, Object, Texture, Statistics);
+            //test code
+            //BlendRGBAuc(Statistics, Tracer.FrameBuffer.DisplayEstimate, Tracer.FrameBuffer.FrameEstimate);
 			
+            
 			Statistics.SetStatistic("No. camera rays", "%.2f", "mrays/frame", (float)Tracer.FrameBuffer.Resolution.CumulativeProduct() / 1000000.0f);
 
 			int NoSamples = 0;
@@ -84,19 +87,20 @@ void Render(Tracer& Tracer, Statistics& Statistics)
 				Statistics.SetStatistic("No. light rays", "%.2f", "mrays/frame", (float)(NoSamples * 2) / 1000000.0f);
 
 #ifdef SAMPLE_LIGHT
-				SampleLight(Tracer, Statistics, NoSamples);
+				SampleLight(Tracer, Volume, Object, Texture, Statistics, NoSamples);
 #endif
 
 #ifdef SAMPLE_SHADER
-				SampleShader(Tracer, Statistics, NoSamples);
+				SampleShader(Tracer, Volume, Object, Texture, Statistics, NoSamples);
 #endif
 			}
 
-			GaussianFilterXYZAf(Statistics, 1, Tracer.FrameBuffer.FrameEstimate);
+			GaussianFilterXYZAf(Statistics, 1, Tracer.FrameBuffer.FrameEstimate, Tracer);
 			ComputeEstimate(Tracer, Statistics);
 			ToneMap(Tracer, Statistics);
-			GaussianFilterRGBAuc(Statistics, 1, Tracer.FrameBuffer.RunningEstimateRGB);
+			GaussianFilterRGBAuc(Statistics, 1, Tracer.FrameBuffer.RunningEstimateRGB, Tracer);
 			BlendRGBAuc(Statistics, Tracer.FrameBuffer.DisplayEstimate, Tracer.FrameBuffer.RunningEstimateRGB);
+            
 
 			break;
 		}

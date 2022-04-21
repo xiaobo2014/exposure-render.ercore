@@ -29,11 +29,11 @@ namespace ExposureRender
 	@param[out] Int Intersection result
 	@param[in] VolumeID ID of the volume
 */
-DEVICE void IntersectVolume(Ray R, RNG& RNG, Intersection& Int, const int& VolumeID = 0)
+DEVICE void IntersectVolume(Tracer* pTracer, Volume* pVolume, Object* pLight, Ray R, RNG& RNG, Intersection& Int, const int& VolumeID = 0)
 {
-	Volume& Volume = gpVolumes[gpTracer->VolumeIDs[VolumeID]];
+	//Volume& Volume = gpVolumes[gpTracer->VolumeIDs[VolumeID]];
 
-	if (!Volume.BoundingBox.Intersect(R, R.MinT, R.MaxT))
+	if (!pVolume->BoundingBox.Intersect(R, R.MinT, R.MaxT))
 		return;
 
 	const float S	= -log(RNG.Get1()) / gDensityScale;
@@ -47,15 +47,15 @@ DEVICE void IntersectVolume(Ray R, RNG& RNG, Intersection& Int, const int& Volum
 			return;
 		
 		Int.SetP(R(R.MinT));
-		Int.SetIntensity(Volume(Int.GetP(), VolumeID));
+		Int.SetIntensity((*pVolume)(Int.GetP(), VolumeID));
 
-		Sum				+= gDensityScale * gpTracer->VolumeProperty.GetOpacity(Int.GetIntensity()) * gStepFactorPrimary;
+		Sum				+= gDensityScale * pTracer->VolumeProperty.GetOpacity(Int.GetIntensity()) * gStepFactorPrimary;
 		R.MinT			+= gStepFactorPrimary;
 	}
 
 	Int.SetValid(true);
 	Int.SetWo(-R.D);
-	Int.SetN(Volume.NormalizedGradient(Int.GetP(), Enums::CentralDifferences));
+	Int.SetN(pVolume->NormalizedGradient(Int.GetP(), Enums::CentralDifferences));
 	Int.SetT(R.MinT);
 	Int.SetScatterType(Enums::Volume);
 }
@@ -66,16 +66,16 @@ DEVICE void IntersectVolume(Ray R, RNG& RNG, Intersection& Int, const int& Volum
 	@param[in] VolumeID ID of the volume
 	@return Whether an scattering event occurs in the ray's parametric range
 */
-DEVICE bool IntersectsVolume(Ray R, RNG& RNG, const int& VolumeID = 0)
+DEVICE bool IntersectsVolume(Tracer* pTracer, Volume* pVolume, Object* pLight, Ray R, RNG& RNG, const int& VolumeID = 0)
 {
-	if (!gpTracer->VolumeProperty.GetShadows())
+	if (!pTracer->VolumeProperty.GetShadows())
 		return false;
 
-	Volume& Volume = gpVolumes[gpTracer->VolumeIDs[VolumeID]];
+	//Volume& Volume = gpVolumes[gpTracer->VolumeIDs[VolumeID]];
 
 	float MaxT = 0.0f;
 
-	if (!Volume.BoundingBox.Intersect(R, R.MinT, MaxT))
+	if (!pVolume->BoundingBox.Intersect(R, R.MinT, MaxT))
 		return false;
 
 	R.MaxT = min(R.MaxT, MaxT);
@@ -90,7 +90,7 @@ DEVICE bool IntersectsVolume(Ray R, RNG& RNG, const int& VolumeID = 0)
 		if (R.MinT > R.MaxT)
 			return false;
 
-		Sum		+= gDensityScale * gpTracer->VolumeProperty.GetOpacity(Volume(R(R.MinT), VolumeID)) * gStepFactorShadow;
+		Sum		+= gDensityScale * pTracer->VolumeProperty.GetOpacity((*pVolume)(R(R.MinT), VolumeID)) * gStepFactorShadow;
 		R.MinT	+= gStepFactorShadow;
 	}
 

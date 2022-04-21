@@ -26,7 +26,7 @@ template<typename D, typename H, int MaxSize = 32>
 class List
 {
 public:
-	HOST List(const char* pDeviceSymbol) :
+	HOST List() :
 		Map(),
 		MapIt(),
 		HashMap(),
@@ -34,8 +34,27 @@ public:
 		DeviceList(NULL),
 		Counter(0)
 	{
-		sprintf_s(DeviceSymbol, MAX_CHAR_SIZE, "%s", pDeviceSymbol);
+        //sprintf_s(DeviceSymbol, MAX_CHAR_SIZE, "%s", pDeviceSymbol);
+
+        //case 1:
+        //DeviceSymbol = pDeviceSymbol;
+
+        //allocate
+        //int VolumeNum = 1;        
+        //Cuda::Allocate(DeviceSymbol, VolumeNum);
+
+        //case 2:
+        //pDeviceSymbol = &DeviceSymbol;
+        //m_pDeviceSymbol = pDeviceSymbol;
+
+        //case 3:
+        //m_pDeviceSymbol = pDeviceSymbol;
 	}
+
+    HOST ~List()
+    {
+        //Cuda::Free(this->DeviceSymbol);
+    }
 
 	HOST bool Exists(const int& ID)
 	{
@@ -112,10 +131,37 @@ public:
 				Size++;
 			}
 			
+            /*
 			Cuda::Free(this->DeviceList);
 			Cuda::Allocate(this->DeviceList, (int)this->Map.size());
 			Cuda::MemCopyHostToDevice(pHostList, this->DeviceList, Size);
-			Cuda::MemCopyHostToDeviceSymbol(&this->DeviceList, this->DeviceSymbol);
+            */
+            //m_pDeviceSymbol = this->DeviceList;
+
+			//Cuda::MemCopyHostToDeviceSymbol(&this->DeviceList, this->DeviceSymbol);//origin , error
+            
+            // test on when DeviceSymbol is a char string
+            //Cuda::MemCopyHostToDeviceSymbol(this->DeviceList, this->DeviceSymbol);// error
+
+            //Cuda::MemCopyHostToDeviceSymbol(pHostList, this->DeviceSymbol);//error
+
+            //Cuda::MemCopyDeviceToDeviceSymbol(this->DeviceList, this->DeviceSymbol);
+
+            //Cuda::MemCopyDeviceToDeviceSymbol(&this->DeviceList, this->DeviceSymbol);
+
+
+            // test on when DeviceSymbol is a D pointer
+            //Cuda::Free(this->DeviceSymbol);
+            //int VolumeNum = 1;
+            //Cuda::Allocate(this->DeviceSymbol, VolumeNum);
+
+            //case 1:
+            //Cuda::MemCopyDeviceToDevice(this->DeviceList, this->DeviceSymbol);
+
+            //case 2:
+            //Cuda::MemCopyDeviceToDevice(this->DeviceList, &this->DeviceSymbol);//error
+
+            //Cuda::MemCopyDeviceToDevice(this->DeviceList, this->m_pDeviceSymbol);
 		
 			free(pHostList);
 		}
@@ -130,7 +176,11 @@ public:
 			this->MapIt = this->Map.find(ID);
 
 			Cuda::MemCopyHostToDevice(this->MapIt->second, this->DeviceList);
-			Cuda::MemCopyHostToDeviceSymbol(&this->DeviceList, this->DeviceSymbol);
+            //Cuda::MemCopyHostToDeviceSymbol(&this->DeviceList, this->DeviceSymbol);
+            
+            // test on when DeviceSymbol is a D pointer
+            //Cuda::MemCopyDeviceToDevice(this->DeviceList, this->DeviceSymbol);
+
 		}
 	}
 
@@ -154,7 +204,8 @@ public:
 	typename map<int, int>::iterator	HashMapIt;
 	D*									DeviceList;
 	int									Counter;
-	char								DeviceSymbol[MAX_CHAR_SIZE];
+	D*								    DeviceSymbol;
+    //D*								    m_pDeviceSymbol;
 };
 
 }

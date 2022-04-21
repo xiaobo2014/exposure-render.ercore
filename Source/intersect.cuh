@@ -22,49 +22,49 @@
 namespace ExposureRender
 {
 
-DEVICE void IntersectObjects(const Ray& R, Intersection& Int, const int& ScatterTypes = Enums::Object | Enums::Light)
+DEVICE void IntersectObjects(Tracer* pTracer, Volume* pVolume, Object* pLight, const Ray& R, Intersection& Int, const int& ScatterTypes = Enums::Object | Enums::Light)
 {
 	float NearestT = FLT_MAX;
 
 	Intersection LocalInt;
 
-	for (int i = 0; i < gpTracer->ObjectIDs.GetNoIndices(); i++)
+	for (int i = 0; i < pTracer->ObjectIDs.GetNoIndices(); i++)
 	{
-		const Object& Object = gpObjects[i];
+		//const Object& Object = gpObjects[i];
 		
-		if (Object.Visible && Object.Shape.Intersect(R, LocalInt) && LocalInt.GetT() < NearestT)
+		if (pLight->Visible && pLight->Shape.Intersect(R, LocalInt) && LocalInt.GetT() < NearestT)
 		{
 			NearestT			= LocalInt.GetT();
 			Int					= LocalInt;
 
 			Int.SetValid(true);
-			Int.SetScatterType(Object.Emitter ? Enums::Light : Enums::Object);
+			Int.SetScatterType(pLight->Emitter ? Enums::Light : Enums::Object);
 			Int.SetID(i);
 			Int.SetWo(-R.D);
 		}
 	}
 }
 
-DEVICE bool IntersectsObjects(Ray R)
+DEVICE bool IntersectsObjects(Tracer* pTracer, Volume* pVolume, Object* pLight, Ray R)
 {
-	for (int i = 0; i < gpTracer->ObjectIDs.GetNoIndices(); i++)
+	for (int i = 0; i < pTracer->ObjectIDs.GetNoIndices(); i++)
 	{
-		if (gpObjects[i].Shape.Intersects(R))
+		if (pLight->Shape.Intersects(R))
 			return true;
 	}
 
 	return false;
 }
 
-DEVICE bool Intersect(Ray R, RNG& RNG, Intersection& Int, const int& ScatterTypes = Enums::Volume | Enums::Object | Enums::Light)
+DEVICE bool Intersect(Tracer* pTracer, Volume* pVolume, Object* pLight, Ray R, RNG& RNG, Intersection& Int, const int& ScatterTypes = Enums::Volume | Enums::Object | Enums::Light)
 {
 	Intersection Ints[2];
 	
 	if (ScatterTypes & Enums::Object || ScatterTypes & Enums::Light)
-		IntersectObjects(R, Ints[0], ScatterTypes);
+		IntersectObjects(pTracer,  pVolume, pLight, R, Ints[0], ScatterTypes);
 
 	if (ScatterTypes & Enums::Volume)
-		IntersectVolume(R, RNG, Ints[1]);
+		IntersectVolume(pTracer, pVolume, pLight, R, RNG, Ints[1]);
 	
 	float HitT = FLT_MAX;
 
@@ -80,12 +80,12 @@ DEVICE bool Intersect(Ray R, RNG& RNG, Intersection& Int, const int& ScatterType
 	return Int.GetValid();
 }
 
-DEVICE bool Intersects(Ray R, RNG& RNG)
+DEVICE bool Intersects(Tracer* pTracer, Volume* pVolume, Object* pLight, Ray R, RNG& RNG)
 {
-	if (IntersectsObjects(R))
+	if (IntersectsObjects(pTracer, pVolume, pLight, R))
 		return true;
 
-	if (IntersectsVolume(R, RNG))
+	if (IntersectsVolume(pTracer, pVolume, pLight, R, RNG))
 		return true;
 
 	return false;

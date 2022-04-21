@@ -23,7 +23,7 @@
 namespace ExposureRender
 {
 
-KERNEL void KrnlGaussianFilterHorizontalRGBAuc(int Radius, Buffer2D<ColorRGBAuc>* Input, Buffer2D<ColorRGBAuc>* Output)
+KERNEL void KrnlGaussianFilterHorizontalRGBAuc(int Radius, Buffer2D<ColorRGBAuc>* Input, Buffer2D<ColorRGBAuc>* Output, Tracer* pTracer)
 {
 	KERNEL_2D(Input->GetResolution()[0], Input->GetResolution()[1])
 		
@@ -39,7 +39,7 @@ KERNEL void KrnlGaussianFilterHorizontalRGBAuc(int Radius, Buffer2D<ColorRGBAuc>
 
 	for (int x = Range[0]; x <= Range[1]; x++)
 	{
-		const float Weight = gpTracer->GaussianFilterTables.Weight(Radius, Radius + (IDx - x), Radius);
+		const float Weight = pTracer->GaussianFilterTables.Weight(Radius, Radius + (IDx - x), Radius);
 
 		Sum[0]		+= Weight * (*Input)(x, IDy)[0];
 		Sum[1]		+= Weight * (*Input)(x, IDy)[1];
@@ -59,7 +59,7 @@ KERNEL void KrnlGaussianFilterHorizontalRGBAuc(int Radius, Buffer2D<ColorRGBAuc>
 		(*Output)(IDx, IDy) = (*Input)(IDx, IDy);
 }
 
-KERNEL void KrnlGaussianFilterVerticalRGBAuc(int Radius, Buffer2D<ColorRGBAuc>* Input, Buffer2D<ColorRGBAuc>* Output)
+KERNEL void KrnlGaussianFilterVerticalRGBAuc(int Radius, Buffer2D<ColorRGBAuc>* Input, Buffer2D<ColorRGBAuc>* Output, Tracer* pTracer)
 {
 	KERNEL_2D(Input->GetResolution()[0], Input->GetResolution()[1])
 		
@@ -75,7 +75,7 @@ KERNEL void KrnlGaussianFilterVerticalRGBAuc(int Radius, Buffer2D<ColorRGBAuc>* 
 
 	for (int y = Range[0]; y <= Range[1]; y++)
 	{
-		const float Weight = gpTracer->GaussianFilterTables.Weight(Radius, Radius, Radius + (IDy - y));
+		const float Weight = pTracer->GaussianFilterTables.Weight(Radius, Radius, Radius + (IDy - y));
 
 		Sum[0]		+= Weight * (*Input)(IDx, y)[0];
 		Sum[1]		+= Weight * (*Input)(IDx, y)[1];
@@ -95,7 +95,7 @@ KERNEL void KrnlGaussianFilterVerticalRGBAuc(int Radius, Buffer2D<ColorRGBAuc>* 
 		(*Output)(IDx, IDy) = (*Input)(IDx, IDy);
 }
 
-void GaussianFilterRGBAuc(Statistics& Statistics, int Radius, Buffer2D<ColorRGBAuc>& Input)
+void GaussianFilterRGBAuc(Statistics& Statistics, int Radius, Buffer2D<ColorRGBAuc>& Input, Tracer& Tracer)
 {
 	LAUNCH_DIMENSIONS(Input.GetResolution()[0], Input.GetResolution()[1], 1, BLOCK_W, BLOCK_H, 1)
 	
@@ -112,11 +112,17 @@ void GaussianFilterRGBAuc(Statistics& Statistics, int Radius, Buffer2D<ColorRGBA
 	Cuda::MemCopyHostToDevice(&Input, pInput);
 	Cuda::MemCopyHostToDevice(&Output, pOutput);
 
-	LAUNCH_CUDA_KERNEL_TIMED((KrnlGaussianFilterHorizontalRGBAuc<<<GridDim, BlockDim>>>(Radius, pInput, pOutput)), "GaussianFilterRGBAuc (horizontal)");
-	LAUNCH_CUDA_KERNEL_TIMED((KrnlGaussianFilterVerticalRGBAuc<<<GridDim, BlockDim>>>(Radius, pOutput, pInput)), "GaussianFilterRGBAuc (vertical)");
+    ExposureRender::Tracer* pTracer = NULL;
+    Cuda::Allocate(pTracer);
+    Cuda::MemCopyHostToDevice(&Tracer, pTracer);
+
+	LAUNCH_CUDA_KERNEL_TIMED((KrnlGaussianFilterHorizontalRGBAuc<<<GridDim, BlockDim>>>(Radius, pInput, pOutput, pTracer)), "GaussianFilterRGBAuc (horizontal)");
+	LAUNCH_CUDA_KERNEL_TIMED((KrnlGaussianFilterVerticalRGBAuc<<<GridDim, BlockDim>>>(Radius, pOutput, pInput, pTracer)), "GaussianFilterRGBAuc (vertical)");
 
 	Cuda::Free(pInput);
 	Cuda::Free(pOutput);
+
+    Cuda::Free(pTracer);
 }
 
 }

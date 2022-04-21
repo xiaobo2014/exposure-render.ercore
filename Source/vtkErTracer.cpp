@@ -48,7 +48,8 @@ vtkErTracer::vtkErTracer(void)
 	this->ValueTextActor				= NULL;
 	this->UnitTextActor				= NULL;
 
-	this->SetRenderMode(Enums::StochasticRayCasting);
+    //this->SetRenderMode(Enums::StandardRayCasting);
+    this->SetRenderMode(Enums::StochasticRayCasting);
 	this->SetNoiseReduction(true);
 	this->SetShowStatistics(true);
 

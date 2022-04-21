@@ -49,19 +49,41 @@ CONSTANT_DEVICE float gStepFactorShadow = 0.01953125f;
 #include "texture.h"
 #include "bitmap.h"
 
+//#include "wrapper.cuh"
+
+int VolumeNum = 1;
+
+
 DEVICE ExposureRender::Tracer*			gpTracer			= NULL;
+//ExposureRender::Cuda::Allocate(gpTracer, VolumeNum);
 DEVICE ExposureRender::Volume* 			gpVolumes			= NULL;
 DEVICE ExposureRender::Object*			gpObjects			= NULL;
 DEVICE ExposureRender::Texture*			gpTextures			= NULL;
 DEVICE ExposureRender::Bitmap*			gpBitmaps			= NULL;
 
+
+/*
+DEVICE ExposureRender::Tracer			global_Tracer;
+DEVICE ExposureRender::Volume			global_Volumes;
+DEVICE ExposureRender::Object			global_Objects;
+DEVICE ExposureRender::Texture			global_Textures;
+DEVICE ExposureRender::Bitmap			global_Bitmaps;
+
+DEVICE ExposureRender::Tracer*			gpTracer = &global_Tracer;
+DEVICE ExposureRender::Volume* 		gpVolumes = &global_Volumes;
+DEVICE ExposureRender::Object*			gpObjects = &global_Objects;
+DEVICE ExposureRender::Texture*		gpTextures = &global_Textures;
+DEVICE ExposureRender::Bitmap*			gpBitmaps = &global_Bitmaps;
+*/
+
 #include "list.cuh"
 
-ExposureRender::Cuda::List<ExposureRender::Tracer, ExposureRender::HostTracer>					gTracers("gpTracer");
-ExposureRender::Cuda::List<ExposureRender::Volume, ExposureRender::HostVolume>					gVolumes("gpVolumes");
-ExposureRender::Cuda::List<ExposureRender::Object, ExposureRender::HostObject>					gObjects("gpObjects");
-ExposureRender::Cuda::List<ExposureRender::Texture, ExposureRender::HostTexture>				gTextures("gpTextures");
-ExposureRender::Cuda::List<ExposureRender::Bitmap, ExposureRender::HostBitmap>					gBitmaps("gpBitmaps");
+ExposureRender::Cuda::List<ExposureRender::Tracer, ExposureRender::HostTracer>					gTracers;
+ExposureRender::Cuda::List<ExposureRender::Volume, ExposureRender::HostVolume>					gVolumes;
+ExposureRender::Cuda::List<ExposureRender::Object, ExposureRender::HostObject>					gObjects;
+ExposureRender::Cuda::List<ExposureRender::Texture, ExposureRender::HostTexture>				gTextures;
+ExposureRender::Cuda::List<ExposureRender::Bitmap, ExposureRender::HostBitmap>					gBitmaps;
+
 
 #include "autofocus.cuh"
 #include "render.cuh"
@@ -171,7 +193,13 @@ EXPOSURE_RENDER_DLL void Render(int TracerID, Statistics& Statistics)
 	if (Tracer.VolumeIDs[1] >= 0)
 		gVolumes[Tracer.VolumeIDs[1]].Voxels.Bind(TexVolume1);
 
-	Render(Tracer, Statistics);
+    Volume& Volume = gVolumes[Tracer.VolumeIDs[0]];
+
+    Object& Object = gObjects[0];
+
+    Texture& Texture = gTextures[0];
+
+	Render(Tracer, Volume, Object, Texture, Statistics);
 		
 	if (Tracer.NoiseReduction)
 		BilateralFilterRunningEstimate(Tracer, Statistics);
@@ -196,7 +224,12 @@ EXPOSURE_RENDER_DLL void GetDisplayEstimate(int TracerID, ColorRGBAuc* pData)
 {
 	FrameBuffer& FB = gTracers[TracerID].FrameBuffer;
 
+    //origin code
 	Cuda::MemCopyDeviceToHost(FB.DisplayEstimate.GetData(), (ColorRGBAuc*)pData, FB.DisplayEstimate.GetNoElements());
+
+    //lxb update
+    //memcpy((void*)pData, (void*)FB.DisplayEstimate.GetData(), FB.Resolution[0] * FB.Resolution[1] * sizeof(ColorRGBAuc));
+    
 }
 
 }

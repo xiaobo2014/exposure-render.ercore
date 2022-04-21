@@ -22,20 +22,28 @@
 namespace ExposureRender
 {
 
-KERNEL void KrnlComputeEstimate()
+KERNEL void KrnlComputeEstimate(Tracer* pTracer)
 {
-	KERNEL_2D(gpTracer->FrameBuffer.Resolution[0], gpTracer->FrameBuffer.Resolution[1])
+	KERNEL_2D(pTracer->FrameBuffer.Resolution[0], pTracer->FrameBuffer.Resolution[1])
 
-	gpTracer->FrameBuffer.RunningEstimateXYZ(IDx, IDy)[0] = CumulativeMovingAverage(gpTracer->FrameBuffer.RunningEstimateXYZ(IDx, IDy)[0], gpTracer->FrameBuffer.FrameEstimate(IDx, IDy)[0], gpTracer->NoEstimates + 1);
-	gpTracer->FrameBuffer.RunningEstimateXYZ(IDx, IDy)[1] = CumulativeMovingAverage(gpTracer->FrameBuffer.RunningEstimateXYZ(IDx, IDy)[1], gpTracer->FrameBuffer.FrameEstimate(IDx, IDy)[1], gpTracer->NoEstimates + 1);
-	gpTracer->FrameBuffer.RunningEstimateXYZ(IDx, IDy)[2] = CumulativeMovingAverage(gpTracer->FrameBuffer.RunningEstimateXYZ(IDx, IDy)[2], gpTracer->FrameBuffer.FrameEstimate(IDx, IDy)[2], gpTracer->NoEstimates + 1);
-	gpTracer->FrameBuffer.RunningEstimateXYZ(IDx, IDy)[3] = CumulativeMovingAverage(gpTracer->FrameBuffer.RunningEstimateXYZ(IDx, IDy)[3], gpTracer->FrameBuffer.FrameEstimate(IDx, IDy)[3], gpTracer->NoEstimates + 1);
+	pTracer->FrameBuffer.RunningEstimateXYZ(IDx, IDy)[0] = CumulativeMovingAverage(pTracer->FrameBuffer.RunningEstimateXYZ(IDx, IDy)[0], pTracer->FrameBuffer.FrameEstimate(IDx, IDy)[0], pTracer->NoEstimates + 1);
+	pTracer->FrameBuffer.RunningEstimateXYZ(IDx, IDy)[1] = CumulativeMovingAverage(pTracer->FrameBuffer.RunningEstimateXYZ(IDx, IDy)[1], pTracer->FrameBuffer.FrameEstimate(IDx, IDy)[1], pTracer->NoEstimates + 1);
+	pTracer->FrameBuffer.RunningEstimateXYZ(IDx, IDy)[2] = CumulativeMovingAverage(pTracer->FrameBuffer.RunningEstimateXYZ(IDx, IDy)[2], pTracer->FrameBuffer.FrameEstimate(IDx, IDy)[2], pTracer->NoEstimates + 1);
+	pTracer->FrameBuffer.RunningEstimateXYZ(IDx, IDy)[3] = CumulativeMovingAverage(pTracer->FrameBuffer.RunningEstimateXYZ(IDx, IDy)[3], pTracer->FrameBuffer.FrameEstimate(IDx, IDy)[3], pTracer->NoEstimates + 1);
 }
 
 void ComputeEstimate(Tracer& Tracer, Statistics& Statistics)
 {
 	LAUNCH_DIMENSIONS(Tracer.FrameBuffer.Resolution[0], Tracer.FrameBuffer.Resolution[1], 1, BLOCK_W, BLOCK_H, 1)
-	LAUNCH_CUDA_KERNEL_TIMED((KrnlComputeEstimate<<<GridDim, BlockDim>>>()), "Compute estimate");
+
+    ExposureRender::Tracer* pTracer = NULL;
+    Cuda::Allocate(pTracer);
+    Cuda::MemCopyHostToDevice(&Tracer, pTracer);
+
+	LAUNCH_CUDA_KERNEL_TIMED((KrnlComputeEstimate<<<GridDim, BlockDim>>>(pTracer)), "Compute estimate");
+
+    Cuda::MemCopyDeviceToHost(pTracer, &Tracer);
+    Cuda::Free(pTracer);
 }
 
 }

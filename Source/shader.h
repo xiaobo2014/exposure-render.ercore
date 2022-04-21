@@ -133,17 +133,17 @@ public:
 	@param[in,out] RNG Random number generator
 	@param[in] VolumeID ID of the volume
 */
-DEVICE void GetShader(Intersection Int, Shader& Shader, RNG& RNG, const int& VolumeID = 0)
+DEVICE void GetShader(Tracer* pTracer, Volume* pVolume, Object* pLight, Texture* pTexture, Intersection Int, Shader& Shader, RNG& RNG, const int& VolumeID = 0)
 {
 	switch (Int.GetScatterType())
 	{
 		case Enums::Volume:
 		{
 			// Get reference to volume
-			Volume& Volume = gpVolumes[gpTracer->VolumeIDs[VolumeID]];
+			Volume& Volume = pVolume[pTracer->VolumeIDs[VolumeID]];
 			
 			// Get reference to volume property
-			VolumeProperty& VolumeProperty = gpTracer->VolumeProperty;
+			VolumeProperty& VolumeProperty = pTracer->VolumeProperty;
 
 			const ColorXYZf Diffuse			= VolumeProperty.GetDiffuse(Int.GetIntensity());
 			const ColorXYZf Specular		= VolumeProperty.GetSpecular(Int.GetIntensity());
@@ -226,9 +226,9 @@ DEVICE void GetShader(Intersection Int, Shader& Shader, RNG& RNG, const int& Vol
 
 		case Enums::Object:
 		{
-			const ColorXYZf Diffuse		= EvaluateTexture(gpObjects[Int.GetID()].DiffuseTextureID, Int.GetUV());
-			const ColorXYZf Specular	= EvaluateTexture(gpObjects[Int.GetID()].SpecularTextureID, Int.GetUV());
-			const ColorXYZf Glossiness	= EvaluateTexture(gpObjects[Int.GetID()].GlossinessTextureID, Int.GetUV());
+			const ColorXYZf Diffuse		= EvaluateTexture(pTexture, pLight->DiffuseTextureID, Int.GetUV());
+			const ColorXYZf Specular	= EvaluateTexture(pTexture, pLight->SpecularTextureID, Int.GetUV());
+			const ColorXYZf Glossiness	= EvaluateTexture(pTexture, pLight->GlossinessTextureID, Int.GetUV());
 
 			Shader.Type	= Enums::Brdf;			
 			Shader.Brdf	= Brdf(Int.GetN(), Int.GetWo(), Diffuse, Specular, 15, 500);

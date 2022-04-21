@@ -23,30 +23,30 @@
 namespace ExposureRender
 {
 
-KERNEL void KrnlSampleBrdf(int NoSamples)
+KERNEL void KrnlSampleBrdf(Tracer* pTracer, Volume* pVolume, Object* pLight, Texture* pTexture, int NoSamples)
 {
-	KERNEL_2D(gpTracer->FrameBuffer.Resolution[0], gpTracer->FrameBuffer.Resolution[1])
+	KERNEL_2D(pTracer->FrameBuffer.Resolution[0], pTracer->FrameBuffer.Resolution[1])
 
 	if (IDk >= NoSamples)
 		return;
 
 	// Get sample ID
-	int& SampleID = gpTracer->FrameBuffer.IDs(IDx, IDy);
+	int& SampleID = pTracer->FrameBuffer.IDs(IDx, IDy);
 
 	if (SampleID < 0)
 		return;
 
 	// Get sample
-	RenderSample& Sample = gpTracer->FrameBuffer.Samples[SampleID];
+	RenderSample& Sample = pTracer->FrameBuffer.Samples[SampleID];
 
-	ColorXYZAf& FrameEstimate = gpTracer->FrameBuffer.FrameEstimate(Sample.UV[0], Sample.UV[1]);
+	ColorXYZAf& FrameEstimate = pTracer->FrameBuffer.FrameEstimate(Sample.UV[0], Sample.UV[1]);
 
 	// Get random number generator
-	RNG RNG(&gpTracer->FrameBuffer.RandomSeeds1(Sample.UV[0], Sample.UV[1]), &gpTracer->FrameBuffer.RandomSeeds2(Sample.UV[0], Sample.UV[1]));
+	RNG RNG(&pTracer->FrameBuffer.RandomSeeds1(Sample.UV[0], Sample.UV[1]), &pTracer->FrameBuffer.RandomSeeds2(Sample.UV[0], Sample.UV[1]));
 
 	Shader Shader;
 
-	GetShader(Sample.Intersection, Shader, RNG);
+    GetShader(pTracer, pVolume, pLight, pTexture, Sample.Intersection, Shader, RNG);
 
 	float ShaderPdf = 0.0f;
 
@@ -63,7 +63,7 @@ KERNEL void KrnlSampleBrdf(int NoSamples)
 	
 	Intersection Int;
 
-	if (Intersect(R, RNG, Int, Enums::Light))
+	if (Intersect(pTracer, pVolume, pLight, R, RNG, Int, Enums::Light))
 	{
 		switch (Int.GetScatterType())
 		{
@@ -71,14 +71,14 @@ KERNEL void KrnlSampleBrdf(int NoSamples)
 			{
 				if (Int.GetID() == Sample.LightID)
 				{
-					Object& Light = gpObjects[Int.GetID()];
+					//Object& Light = gpObjects[Int.GetID()];
 
-					ColorXYZf Li = Light.Multiplier * EvaluateTexture(Light.EmissionTextureID, Int.GetUV());
+					ColorXYZf Li = pLight->Multiplier * EvaluateTexture(pTexture, pLight->EmissionTextureID, Int.GetUV());
 
-					if (Light.EmissionUnit == Enums::Power)
-						Li /= Light.Shape.GetArea();
+					if (pLight->EmissionUnit == Enums::Power)
+						Li /= pLight->Shape.GetArea();
 
-					const float LightPdf = LengthSquared(Int.GetP(), Sample.Intersection.GetP()) / (AbsDot(-R.D, Int.GetN()) * Light.Shape.GetArea());
+					const float LightPdf = LengthSquared(Int.GetP(), Sample.Intersection.GetP()) / (AbsDot(-R.D, Int.GetN()) * pLight->Shape.GetArea());
 
 					const float Weight = PowerHeuristic(1, ShaderPdf, 1, LightPdf);
 
@@ -89,14 +89,14 @@ KERNEL void KrnlSampleBrdf(int NoSamples)
 					else
 						Ld = F * ((Li * Weight) / ShaderPdf);
 
-					Ld *= (float)gpTracer->LightIDs.GetNoIndices();
+					Ld *= (float)pTracer->LightIDs.GetNoIndices();
 					
 					R.O		= Int.GetP();
 					R.D		= Normalize(Sample.Intersection.GetP() - R.O);
 					R.MinT	= RAY_EPS;
 					R.MaxT	= Length(Sample.Intersection.GetP(), R.O);
 
-					if (!Intersects(R, RNG))
+					if (!Intersects(pTracer, pVolume, pLight, R, RNG))
 					{
 						FrameEstimate[0] += Ld[0];
 						FrameEstimate[1] += Ld[1];
@@ -124,10 +124,34 @@ KERNEL void KrnlSampleBrdf(int NoSamples)
 	}
 }
 
-void SampleShader(Tracer& Tracer, Statistics& Statistics, int NoSamples)
+void SampleShader(Tracer& Tracer, Volume& Volume, Object& Object, Texture& Texture, Statistics& Statistics, int NoSamples)
 {
 	LAUNCH_DIMENSIONS(Tracer.FrameBuffer.Resolution[0], Tracer.FrameBuffer.Resolution[1], 1, BLOCK_W, BLOCK_H, 1)
-	LAUNCH_CUDA_KERNEL_TIMED((KrnlSampleBrdf<<<GridDim, BlockDim>>>(NoSamples)), "Sample shader"); 
+
+    ExposureRender::Tracer* pTracer = NULL;
+    Cuda::Allocate(pTracer);
+    Cuda::MemCopyHostToDevice(&Tracer, pTracer);
+
+    ExposureRender::Volume* pVolume = NULL;
+    Cuda::Allocate(pVolume);
+    Cuda::MemCopyHostToDevice(&Volume, pVolume);
+
+    ExposureRender::Object* pObject = NULL;
+    Cuda::Allocate(pObject);
+    Cuda::MemCopyHostToDevice(&Object, pObject);
+
+    ExposureRender::Texture* pTexture = NULL;
+    Cuda::Allocate(pTexture);
+    Cuda::MemCopyHostToDevice(&Texture, pTexture);
+
+	LAUNCH_CUDA_KERNEL_TIMED((KrnlSampleBrdf<<<GridDim, BlockDim>>>(pTracer, pVolume, pObject, pTexture, NoSamples)), "Sample shader");
+
+    Cuda::MemCopyDeviceToHost(pTracer, &Tracer);
+    Cuda::Free(pTracer);
+
+    Cuda::Free(pVolume);
+    Cuda::Free(pObject);
+    Cuda::Free(pTexture);
 }
 
 }

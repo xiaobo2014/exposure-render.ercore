@@ -26,22 +26,22 @@ namespace ExposureRender
 	@param[in] UV UV coordinates
 	@return Evaluated color
 */
-HOST_DEVICE ColorXYZf EvaluateTexture(const int& ID, const Vec2f& UV)
+HOST_DEVICE ColorXYZf EvaluateTexture(Texture* pTexture, const int& ID, const Vec2f& UV)
 {
 	if (ID < 0)
 		return ColorXYZf::Black();
 
-	const Texture& T = gpTextures[ID];
+	//const Texture& T = gpTextures[ID];
 
 	ColorXYZf L;
 
 	Vec2f TextureUV = UV;
 
-	TextureUV[0] *= T.Repeat[0];
-	TextureUV[1] *= T.Repeat[1];
+	TextureUV[0] *= pTexture->Repeat[0];
+	TextureUV[1] *= pTexture->Repeat[1];
 	
-	TextureUV[0] += T.Offset[0];
-	TextureUV[1] += 1.0f - T.Offset[1];
+	TextureUV[0] += pTexture->Offset[0];
+	TextureUV[1] += 1.0f - pTexture->Offset[1];
 	
 	TextureUV[0] = TextureUV[0] - floorf(TextureUV[0]);
 	TextureUV[1] = TextureUV[1] - floorf(TextureUV[1]);
@@ -49,30 +49,30 @@ HOST_DEVICE ColorXYZf EvaluateTexture(const int& ID, const Vec2f& UV)
 	TextureUV[0] = Clamp(TextureUV[0], 0.0f, 1.0f);
 	TextureUV[1] = Clamp(TextureUV[1], 0.0f, 1.0f);
 
-	if (T.Flip[0])
+	if (pTexture->Flip[0])
 		TextureUV[0] = 1.0f - TextureUV[0];
 
-	if (T.Flip[1])
+	if (pTexture->Flip[1])
 		TextureUV[1] = 1.0f - TextureUV[1];
 
-	switch (T.Type)
+	switch (pTexture->Type)
 	{
 		case Enums::Procedural:
 		{
-			L = T.Procedural.Evaluate(TextureUV);
+			L = pTexture->Procedural.Evaluate(TextureUV);
 			break;
 		}
 
 		case Enums::Bitmap:
 		{
-			if (T.BitmapID >= 0)
-				L = ColorXYZf::FromRGBAuc((gpBitmaps[T.BitmapID].GetPixels())(TextureUV, true).D);
+			if (pTexture->BitmapID >= 0)
+				L = ColorXYZf::FromRGBAuc((gpBitmaps[pTexture->BitmapID].GetPixels())(TextureUV, true).D);
 
 			break;
 		}
 	}
 
-	return T.OutputLevel * L;
+	return pTexture->OutputLevel * L;
 }
 
 }

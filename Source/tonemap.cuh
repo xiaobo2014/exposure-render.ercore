@@ -19,27 +19,35 @@
 namespace ExposureRender
 {
 
-KERNEL void KrnlToneMap()
+KERNEL void KrnlToneMap(Tracer* pTracer)
 {
-	KERNEL_2D(gpTracer->FrameBuffer.Resolution[0], gpTracer->FrameBuffer.Resolution[1])
+	KERNEL_2D(pTracer->FrameBuffer.Resolution[0], pTracer->FrameBuffer.Resolution[1])
 
-	ColorXYZAf RunningEstimateXYZ = gpTracer->FrameBuffer.RunningEstimateXYZ(IDx, IDy);
+	ColorXYZAf RunningEstimateXYZ = pTracer->FrameBuffer.RunningEstimateXYZ(IDx, IDy);
 
-	RunningEstimateXYZ.ToneMap(gpTracer->Camera.GetExposure());
+	RunningEstimateXYZ.ToneMap(pTracer->Camera.GetExposure());
 	
 	ColorRGBAuc ToneMapped = ColorRGBAuc::FromXYZAf(RunningEstimateXYZ.D);
 
-// 	ToneMapped.GammaCorrect(gpTracer->Camera.Gamma);
+// 	ToneMapped.GammaCorrect(pTracer->Camera.Gamma);
 
-//	gpTracer->FrameBuffer.PixelHysteresis(IDx, IDy).AddPixel(ToneMapped);
+//	pTracer->FrameBuffer.PixelHysteresis(IDx, IDy).AddPixel(ToneMapped);
 
-	gpTracer->FrameBuffer.RunningEstimateRGB(IDx, IDy) = ToneMapped;//gpTracer->FrameBuffer.PixelHysteresis(IDx, IDy).PixelAverage;
+	pTracer->FrameBuffer.RunningEstimateRGB(IDx, IDy) = ToneMapped;//pTracer->FrameBuffer.PixelHysteresis(IDx, IDy).PixelAverage;
 }
 
 void ToneMap(Tracer& Tracer, Statistics& Statistics)
 {
 	LAUNCH_DIMENSIONS(Tracer.FrameBuffer.Resolution[0], Tracer.FrameBuffer.Resolution[1], 1, BLOCK_W, BLOCK_H, 1)
-	LAUNCH_CUDA_KERNEL_TIMED((KrnlToneMap<<<GridDim, BlockDim>>>()), "Tone map");
+        
+    ExposureRender::Tracer* pTracer = NULL;
+    Cuda::Allocate(pTracer);
+    Cuda::MemCopyHostToDevice(&Tracer, pTracer);
+
+	LAUNCH_CUDA_KERNEL_TIMED((KrnlToneMap<<<GridDim, BlockDim>>>(pTracer)), "Tone map");
+
+    Cuda::MemCopyDeviceToHost(pTracer, &Tracer);
+    Cuda::Free(pTracer);
 }
 
 }
