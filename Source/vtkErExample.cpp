@@ -42,7 +42,8 @@
 
 // Specify volume file her (*.mhd)
 //char gVolumeFile[] = "C:\\Dropbox\\Work\\Data\\Volumes\\engine.mhd";
-char gVolumeFile[] = "D:\\exposure-download\\volumes\\engine.mhd";
+//char gVolumeFile[] = "D:\\exposure-download\\volumes\\engine.mhd";
+char gVolumeFile[] = "D:\\DataTransfer\\aorta_coronary_chamber_image\\CHEN_MEIRONG.mhd";
 
 //#define BACK_PLANE_ON
 #define KEY_LIGHT_ON
@@ -130,64 +131,47 @@ void CreateVolumeProperty(vtkErTracer* Tracer)
 	const float StepSize = 10.0f;
 
 	VolumeProperty->SetShadows(true);
-	VolumeProperty->SetStepFactorPrimary(2.0f);
-	VolumeProperty->SetStepFactorShadow(5.0f);
-	VolumeProperty->SetShadingMode(Enums::BrdfOnly);
-	VolumeProperty->SetDensityScale(10);
-	VolumeProperty->SetGradientFactor(1.0f);
+	VolumeProperty->SetStepFactorPrimary(3.0f);
+	VolumeProperty->SetStepFactorShadow(3.0f);
+	VolumeProperty->SetShadingMode(Enums::Hybrid);
+	VolumeProperty->SetDensityScale(100);
+	VolumeProperty->SetGradientFactor(3.0f);
 
-	vtkSmartPointer<vtkPiecewiseFunction> Opacity = vtkSmartPointer<vtkPiecewiseFunction>::New();
-	
+	vtkSmartPointer<vtkPiecewiseFunction> Opacity = vtkSmartPointer<vtkPiecewiseFunction>::New();	
+	//Opacity->AddPoint(-217, 0);
+	//Opacity->AddPoint(-108.75, 0.00185);
 	Opacity->AddPoint(0, 0);
-	Opacity->AddPoint(10, 0);
-	Opacity->AddPoint(151, 1);
-	
+    Opacity->AddPoint(108, 0.1);
+    Opacity->AddPoint(324, 0.467);
+    Opacity->AddPoint(432, 0.712);
+    Opacity->AddPoint(540, 0.916);
+    Opacity->AddPoint(649, 1);	
 	VolumeProperty->SetOpacity(Opacity);
 
-	vtkSmartPointer<vtkColorTransferFunction> Diffuse = vtkSmartPointer<vtkColorTransferFunction>::New();
-	
-	/*
-	for (int i = 0; i < 36; i++)
-	{
-		Diffuse->AddHSVPoint(i, rand() / (float)RAND_MAX, 1.0f, 1.0f);
-	}
-	*/
-/*
-	const float DiffuseLevel = 1.0f;
-
-	Diffuse->AddRGBPoint(0, DiffuseLevel, DiffuseLevel, DiffuseLevel);
-	Diffuse->AddRGBPoint(2048, DiffuseLevel, DiffuseLevel, DiffuseLevel);
-	*/
-	
-	Diffuse->AddRGBPoint(50, .8f, 0.1f, 0.1f);
-	Diffuse->AddRGBPoint(2048, 0.7, 0.5, 0.2);
-	
-
+	vtkSmartPointer<vtkColorTransferFunction> Diffuse = vtkSmartPointer<vtkColorTransferFunction>::New();	
+	Diffuse->AddRGBPoint(177, 0.651, 0, 0);
+	Diffuse->AddRGBPoint(239, 0.933, 0, 0);
+    Diffuse->AddRGBPoint(302, 1, 0.8, 0.0627);
+    Diffuse->AddRGBPoint(496, 1, 0.906, 0.667);
+    Diffuse->AddRGBPoint(677, 1, 0.882, 0.216);
+    Diffuse->AddRGBPoint(809, 1, 1, 1);
 	VolumeProperty->SetDiffuse(Diffuse);
 
-	vtkSmartPointer<vtkColorTransferFunction> Specular = vtkSmartPointer<vtkColorTransferFunction>::New();
-	
+	vtkSmartPointer<vtkColorTransferFunction> Specular = vtkSmartPointer<vtkColorTransferFunction>::New();	
 	const float SpecularLevel = 0.1f;
-
 	Specular->AddRGBPoint(0, SpecularLevel, SpecularLevel, SpecularLevel);
 	Specular->AddRGBPoint(2048, SpecularLevel, SpecularLevel, SpecularLevel);
-
 	VolumeProperty->SetSpecular(Specular);
 	
-	vtkSmartPointer<vtkPiecewiseFunction> Glossiness = vtkSmartPointer<vtkPiecewiseFunction>::New();
-	
+	vtkSmartPointer<vtkPiecewiseFunction> Glossiness = vtkSmartPointer<vtkPiecewiseFunction>::New();	
 	const float GlossinessLevel = 100.0f;
-
 	Glossiness->AddPoint(0, GlossinessLevel);
-	Glossiness->AddPoint(2048, GlossinessLevel);
-	
+	Glossiness->AddPoint(2048, GlossinessLevel);	
 	VolumeProperty->SetGlossiness(Glossiness);
 
 	vtkSmartPointer<vtkColorTransferFunction> Emission = vtkSmartPointer<vtkColorTransferFunction>::New();
-
 	Emission->AddRGBPoint(0, 0, 0, 0);
 	Emission->AddRGBPoint(100, 0, 0, 0);
-
 	VolumeProperty->SetEmission(Emission);
 
 	Tracer->SetVolumeProperty(VolumeProperty);
@@ -227,7 +211,7 @@ void CreateCamera(vtkRenderer* Renderer)
 {
 	vtkSmartPointer<vtkErCamera> Camera = vtkSmartPointer<vtkErCamera>::New();
 
-	Camera->SetExposure(1);
+	Camera->SetExposure(0.75);
 
 	// Aperture
 	Camera->SetApertureShape(Enums::Polygon);
@@ -235,6 +219,9 @@ void CreateCamera(vtkRenderer* Renderer)
 	Camera->SetNoApertureBlades(3);
 	Camera->SetApertureAngle(0.0f);
 	Camera->SetClippingRange(0, 1000000);
+
+    //Focus
+    Camera->SetFocalDistance(0.75);
 	
 	// Apply camera to renderer
 	Renderer->SetActiveCamera(Camera);
@@ -245,17 +232,18 @@ void CreateLighting(vtkErTracer* Tracer)
 #ifdef KEY_LIGHT_ON
 	vtkSmartPointer<vtkErObject> KeyLight = vtkSmartPointer<vtkErObject>::New();
 
-	const float KeyLightSize = 0.1f;
+	const float KeyLightSize = 4.07f;
 
 	KeyLight->SetEmitter(true);
 	KeyLight->SetAlignmentType(Enums::Spherical);
 	KeyLight->SetShapeType(Enums::Plane);
 	KeyLight->SetOneSided(false);
 	KeyLight->SetVisible(true);
-	KeyLight->SetElevation(45.0f);
-	KeyLight->SetAzimuth(-45.0f);
-	KeyLight->SetOffset(1.5f);
-	KeyLight->SetMultiplier(10.0f);
+	KeyLight->SetElevation(-26.54f);
+	KeyLight->SetAzimuth(-33.85f);
+	KeyLight->SetOffset(2.906f);
+
+	KeyLight->SetMultiplier(200.0f);
 	KeyLight->SetSize(KeyLightSize, KeyLightSize, KeyLightSize);
 	KeyLight->SetEmissionUnit(Enums::Power);
 	KeyLight->SetRelativeToCamera(true);
