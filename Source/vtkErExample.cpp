@@ -29,6 +29,8 @@
 #include <vtkImageCast.h>
 #include <vtkCommand.h>
 #include <vtkImageGaussianSmooth.h>
+#include <vtkWindowToImageFilter.h>
+#include <vtkPNGWriter.h>
 
 #include "vtkErVolume.h"
 #include "vtkErTexture.h"
@@ -58,6 +60,8 @@ char gVolumeFile[] = "D:\\DataTransfer\\aorta_coronary_chamber_image\\CHEN_MEIRO
 	char gEnvironmentBitmap[] = "C:\\Dropbox\\Work\\Data\\Bitmaps\\environment.png";
 #endif
 
+void InteractorRender();
+void OffScreenRender();
 void ConfigureER(vtkRenderer* Renderer);
 void LoadVolume(vtkErTracer* Tracer);
 void CreateCamera(vtkRenderer* Renderer);
@@ -69,38 +73,92 @@ using namespace ExposureRender;
 
 int main(int, char *[])
 {
-	vtkSmartPointer<vtkRenderWindow> RenderWindow = vtkSmartPointer<vtkRenderWindow>::New();
+    //InteractorRender();
 
-	vtkSmartPointer<vtkRenderer> Renderer = vtkSmartPointer<vtkRenderer>::New();
-
-	vtkSmartPointer<vtkRenderWindowInteractor> RenderWindowInteractor = vtkSmartPointer<vtkRenderWindowInteractor>::New();
-
-	RenderWindowInteractor->SetRenderWindow(RenderWindow);
-	
-	RenderWindow->AddRenderer(Renderer);
-
-	vtkSmartPointer<vtkErTimerCallback> TimerCallback = vtkSmartPointer<vtkErTimerCallback>::New();
-	TimerCallback->SetRenderWindowInteractor(RenderWindowInteractor);
-	
-	vtkSmartPointer<vtkErInteractorStyleTrackballCamera> InteractorStyle = vtkSmartPointer<vtkErInteractorStyleTrackballCamera>::New();
-	InteractorStyle->SetMotionFactor(10);
-		
-	RenderWindowInteractor->Initialize();
-	RenderWindowInteractor->CreateRepeatingTimer(1);
-	RenderWindowInteractor->AddObserver(vtkCommand::TimerEvent, TimerCallback);
-	RenderWindowInteractor->SetInteractorStyle(InteractorStyle);
-
-	RenderWindow->Render();
-	RenderWindow->SetSize(512, 512);
-	RenderWindow->SetWindowName("Exposure Render - VTK wrapping example");
-
-	ConfigureER(Renderer);
-
-	Renderer->ResetCamera();
-
-	RenderWindowInteractor->Start();
+    OffScreenRender();
 
 	return EXIT_SUCCESS;
+}
+
+void InteractorRender()
+{
+    vtkSmartPointer<vtkRenderWindow> RenderWindow = vtkSmartPointer<vtkRenderWindow>::New();
+
+    vtkSmartPointer<vtkRenderer> Renderer = vtkSmartPointer<vtkRenderer>::New();
+
+    vtkSmartPointer<vtkRenderWindowInteractor> RenderWindowInteractor = vtkSmartPointer<vtkRenderWindowInteractor>::New();
+
+    RenderWindowInteractor->SetRenderWindow(RenderWindow);
+
+    RenderWindow->AddRenderer(Renderer);
+
+    vtkSmartPointer<vtkErTimerCallback> TimerCallback = vtkSmartPointer<vtkErTimerCallback>::New();
+    TimerCallback->SetRenderWindowInteractor(RenderWindowInteractor);
+
+    vtkSmartPointer<vtkErInteractorStyleTrackballCamera> InteractorStyle = vtkSmartPointer<vtkErInteractorStyleTrackballCamera>::New();
+    InteractorStyle->SetMotionFactor(10);
+
+    RenderWindowInteractor->Initialize();
+    RenderWindowInteractor->CreateRepeatingTimer(1);
+    RenderWindowInteractor->AddObserver(vtkCommand::TimerEvent, TimerCallback);
+    RenderWindowInteractor->SetInteractorStyle(InteractorStyle);
+
+    RenderWindow->Render();
+    RenderWindow->SetSize(512, 512);
+    RenderWindow->SetWindowName("Exposure Render - VTK wrapping example");
+
+    ConfigureER(Renderer);
+
+    Renderer->ResetCamera();
+
+    RenderWindowInteractor->Start();
+}
+
+void OffScreenRender()
+{
+    vtkSmartPointer<vtkRenderWindow> RenderWindow = vtkSmartPointer<vtkRenderWindow>::New();
+
+    vtkSmartPointer<vtkRenderer> Renderer = vtkSmartPointer<vtkRenderer>::New();
+
+    //vtkSmartPointer<vtkRenderWindowInteractor> RenderWindowInteractor = vtkSmartPointer<vtkRenderWindowInteractor>::New();
+
+    //RenderWindowInteractor->SetRenderWindow(RenderWindow);
+
+    RenderWindow->AddRenderer(Renderer);
+
+    //vtkSmartPointer<vtkErTimerCallback> TimerCallback = vtkSmartPointer<vtkErTimerCallback>::New();
+    //TimerCallback->SetRenderWindowInteractor(RenderWindowInteractor);
+
+    //vtkSmartPointer<vtkErInteractorStyleTrackballCamera> InteractorStyle = vtkSmartPointer<vtkErInteractorStyleTrackballCamera>::New();
+    //InteractorStyle->SetMotionFactor(10);
+
+    //RenderWindowInteractor->Initialize();
+    //RenderWindowInteractor->CreateRepeatingTimer(1);
+    //RenderWindowInteractor->AddObserver(vtkCommand::TimerEvent, TimerCallback);
+    //RenderWindowInteractor->SetInteractorStyle(InteractorStyle);
+
+    RenderWindow->SetSize(512, 512);
+    RenderWindow->SetWindowName("Exposure Render - VTK wrapping example");
+
+    ConfigureER(Renderer);
+
+    Renderer->ResetCamera();
+
+    RenderWindow->Render();
+
+    //RenderWindowInteractor->Start();
+
+    vtkSmartPointer<vtkWindowToImageFilter> windowToImageFilter = vtkSmartPointer<vtkWindowToImageFilter>::New();
+    windowToImageFilter->SetInput(RenderWindow);
+    windowToImageFilter->Update();
+
+    std::string pngFile = "D:\\exposure-render-ercore\\test.png";
+    
+    vtkSmartPointer<vtkPNGWriter> writer = vtkSmartPointer<vtkPNGWriter>::New();
+    writer->SetFileName(pngFile.c_str());
+    writer->SetInputConnection(windowToImageFilter->GetOutputPort());
+    writer->Write();
+
 }
 
 void ConfigureER(vtkRenderer* Renderer)
