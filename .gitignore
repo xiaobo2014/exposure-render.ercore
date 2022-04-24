@@ -3,3 +3,5 @@ Build
 ErCore.dir
 x64
 vtkEr.dir/
+
+Source/CMakeLists.txt.user
