@@ -69,7 +69,7 @@ int vtkErBitmap::RequestDataObject(vtkInformation* vtkNotUsed(request), vtkInfor
 		Output = vtkErBitmapData::New();
 		OutInfo->Set(vtkDataObject::DATA_OBJECT(), Output);
 		Output->FastDelete();
-		Output->SetPipelineInformation(OutInfo);
+        //Output->SetPipelineInformation(OutInfo);
 
 		this->GetOutputPortInformation(0)->Set(vtkDataObject::DATA_EXTENT_TYPE(), Output->GetExtentType());
 	}

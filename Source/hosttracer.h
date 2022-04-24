@@ -36,8 +36,8 @@ public:
 	HOST HostTracer() :
 		HostBase(),
 		RenderMode(Enums::StochasticRayCasting),
-		VolumeProperty(),
-		Camera(),
+        volumeProperty(),
+        camera(),
 		VolumeIDs(),
 		LightIDs(),
 		ObjectIDs(),
@@ -52,8 +52,8 @@ public:
 	HOST HostTracer(const HostTracer& Other) :
 		HostBase(),
 		RenderMode(Enums::StochasticRayCasting),
-		VolumeProperty(),
-		Camera(),
+        volumeProperty(),
+        camera(),
 		VolumeIDs(),
 		LightIDs(),
 		ObjectIDs(),
@@ -67,13 +67,13 @@ public:
 		@param[in] Other Host tracer to copy
 		@return Copied host tracer
 	*/
-	HOST HostTracer& HostTracer::operator = (const HostTracer& Other)
+    HOST HostTracer& operator = (const HostTracer& Other)
 	{
 		HostBase::operator = (Other);
 
 		this->RenderMode			= Other.RenderMode;
-		this->VolumeProperty		= Other.VolumeProperty;
-		this->Camera				= Other.Camera;
+        this->volumeProperty		= Other.volumeProperty;
+        this->camera				= Other.camera;
 		this->VolumeIDs				= Other.VolumeIDs;
 		this->LightIDs				= Other.LightIDs;
 		this->ObjectIDs				= Other.ObjectIDs;
@@ -84,12 +84,12 @@ public:
 	}
 
 	GET_SET_MACRO(HOST, RenderMode, Enums::RenderMode)
-	GET_MACRO(HOST, VolumeProperty, VolumeProperty)
-	GET_REF_MACRO(HOST, VolumeProperty, VolumeProperty)
-	SET_MACRO(HOST, VolumeProperty, VolumeProperty)
-	GET_MACRO(HOST, Camera, Camera)
-	GET_REF_MACRO(HOST, Camera, Camera)
-	SET_MACRO(HOST, Camera, Camera)
+    GET_MACRO(HOST, volumeProperty, VolumeProperty)
+    GET_REF_MACRO(HOST, volumeProperty, VolumeProperty)
+    SET_MACRO(HOST, volumeProperty, VolumeProperty)
+    GET_MACRO(HOST, camera, Camera)
+    GET_REF_MACRO(HOST, camera, Camera)
+    SET_MACRO(HOST, camera, Camera)
 	GET_MACRO(HOST, VolumeIDs, Indices<64>)
 	GET_REF_MACRO(HOST, VolumeIDs, Indices<64>)
 	SET_MACRO(HOST, VolumeIDs, Indices<64>)
@@ -106,8 +106,8 @@ public:
 
 protected:
 	Enums::RenderMode	RenderMode;				/*! Buffer for pixels */
-	VolumeProperty		VolumeProperty;			/*! Volume property */
-	Camera				Camera;					/*! Camera */
+    VolumeProperty		volumeProperty;			/*! Volume property */
+    Camera				camera;					/*! Camera */
 	Indices<64>			VolumeIDs;				/*! Volume IDs */
 	Indices<64>			LightIDs;				/*! Light IDs */
 	Indices<64>			ObjectIDs;				/*! Object IDs */

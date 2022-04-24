@@ -20,6 +20,7 @@
 #include "enums.h"
 #include "vector.h"
 #include "timestamp.h"
+#include "stdio.h"
 
 namespace ExposureRender
 {

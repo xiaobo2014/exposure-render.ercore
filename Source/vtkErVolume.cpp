@@ -70,7 +70,7 @@ int vtkErVolume::RequestDataObject(vtkInformation* vtkNotUsed(request), vtkInfor
 		VolumeDataOut = vtkErVolumeData::New();
 		OutInfo->Set(vtkDataObject::DATA_OBJECT(), VolumeDataOut);
 		VolumeDataOut->FastDelete();
-		VolumeDataOut->SetPipelineInformation(OutInfo);
+        //VolumeDataOut->SetPipelineInformation(OutInfo);
 
 		this->GetOutputPortInformation(0)->Set(vtkDataObject::DATA_EXTENT_TYPE(), VolumeDataOut->GetExtentType());
 	}
@@ -126,7 +126,7 @@ int vtkErVolume::RequestData(vtkInformation* Request, vtkInformationVector** Inp
 	VolumeDataOut->Bindable.GetVoxels().SetFilterMode(this->GetFilterMode());
 	VolumeDataOut->Bindable.SetAcceleratorType(this->GetAcceleratorType());
 	
-	vtkErAlignment::RequestData(VolumeDataOut->Bindable.GetAlignment());
+    vtkErAlignment::RequestData(VolumeDataOut->Bindable.Getalignment());
 
 	VolumeDataOut->Bind();
 

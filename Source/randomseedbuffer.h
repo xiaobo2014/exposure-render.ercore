@@ -30,7 +30,7 @@ public:
 		@param[in] pName Buffer name
 		@param[in] MemoryType Place where the memory resides, can be host or device
 	*/
-	HOST RandomSeedBuffer(const char* pName = "Random seed buffer", const Enums::MemoryType& MemoryType = Enums::Device) :
+    HOST RandomSeedBuffer(const char* pName = "Random seed buffer", const Enums::MemoryType& MemoryType = Enums::Device):
 		Buffer<unsigned int, NoDimensions>(pName, MemoryType)
 	{
 	}

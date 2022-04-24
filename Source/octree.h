@@ -31,8 +31,8 @@ protected:
 	class OctreeNode
 	{
 	public:
-		HOST OctreeNode(const BoundingBox BoundingBox = ExposureRender::BoundingBox()) :
-			BoundingBox(BoundingBox),
+        HOST OctreeNode(const BoundingBox boundingBox = ExposureRender::BoundingBox()) :
+            BoundingBox(boundingBox),
 			FirstChild(-1)
 		{
 		}

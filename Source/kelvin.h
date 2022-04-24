@@ -190,7 +190,7 @@ static KelvinRgb gKelvinRgb[] =
 	@param Kelvin
 	@return RGB color
 */
-inline ColorRGBf KelvinToColorRGBf(const float& Kelvin)
+inline ColorRGBf KelvinToColorRGBf(const float Kelvin)
 {
 	const float CorrectedKelvin = Kelvin - 1000.0f;
 	
@@ -207,7 +207,7 @@ inline ColorRGBf KelvinToColorRGBf(const float& Kelvin)
 	@param Kelvin
 	@return XYZ color
 */
-inline ColorXYZf KelvinToColorXYZf(const float& Kelvin)
+inline ColorXYZf KelvinToColorXYZf(const float Kelvin)
 {
 	return RGBfToXYZf(KelvinToColorRGBf(Kelvin));
 }

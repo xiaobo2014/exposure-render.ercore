@@ -73,10 +73,10 @@ public:
 		@param[in] Other Tracer to copy
 		@return Copied tracer
 	*/
-	HOST Tracer& Tracer::operator = (const HostTracer& Other)
+    HOST Tracer& operator = (const HostTracer& Other)
 	{
 		this->RenderMode		= Other.GetRenderMode();
-		this->Camera			= Other.GetCamera();
+        this->Camera			= Other.Getcamera();
 
 		this->VolumeIDs.Reset();
 
@@ -118,9 +118,9 @@ public:
 				throw(Exception(Enums::Fatal, "Clipping object not found!"));
 		}
 
-		if (this->FrameBuffer.Resolution != Other.GetCamera().GetFilmSize() || *this != Other)
+        if (this->FrameBuffer.Resolution != Other.Getcamera().GetFilmSize() || *this != Other)
 		{
-			this->FrameBuffer.Resize(Other.GetCamera().GetFilmSize());
+            this->FrameBuffer.Resize(Other.Getcamera().GetFilmSize());
 
 			this->NoEstimates = 0;
 			
@@ -133,7 +133,7 @@ public:
 		}
 
 		this->NoiseReduction = Other.GetNoiseReduction();
-		this->VolumeProperty = Other.GetVolumeProperty();
+        this->VolumeProperty = Other.GetvolumeProperty();
 
 		TimeStamp::operator = (Other);
 

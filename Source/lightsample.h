@@ -42,7 +42,7 @@ public:
 		@param[in] Other Light sample to copy
 		@return Light sample
 	*/
-	HOST_DEVICE LightSample& LightSample::operator=(const LightSample& Other)
+    HOST_DEVICE LightSample& operator=(const LightSample& Other)
 	{
 		this->SurfaceUVW = Other.SurfaceUVW;
 

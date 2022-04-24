@@ -30,7 +30,7 @@ public:
 	HOST HostObject() :
 	  	HostBase(),
 		Visible(true),
-		Shape(),
+        shape(),
 		DiffuseTextureID(-1),
 		SpecularTextureID(-1),
 		GlossinessTextureID(-1),
@@ -48,7 +48,7 @@ public:
 	HOST HostObject(const HostObject& Other) :
 	  	HostBase(),
 		Visible(true),
-		Shape(),
+        shape(),
 		DiffuseTextureID(-1),
 		SpecularTextureID(-1),
 		GlossinessTextureID(-1),
@@ -70,7 +70,7 @@ public:
 		HostBase::operator = (Other);
 
 		this->Visible				= Other.Visible;
-		this->Shape					= Other.Shape;
+        this->shape					= Other.shape;
 		this->DiffuseTextureID		= Other.DiffuseTextureID;
 		this->SpecularTextureID		= Other.SpecularTextureID;
 		this->GlossinessTextureID	= Other.GlossinessTextureID;
@@ -79,13 +79,13 @@ public:
 		this->EmissionUnit			= Other.EmissionUnit;
 		this->Clip					= Other.Clip;
 
-		this->Shape.Update();
+        this->shape.Update();
 
 		return *this;
 	}
 
-	GET_SET_MACRO(HOST, Shape, Shape)
-	GET_REF_MACRO(HOST, Shape, Shape)
+    GET_SET_MACRO(HOST, shape, Shape)
+    GET_REF_MACRO(HOST, shape, Shape)
 	GET_SET_MACRO(HOST, Visible, bool)
 	GET_SET_MACRO(HOST, DiffuseTextureID, int)
 	GET_SET_MACRO(HOST, SpecularTextureID, int)
@@ -98,7 +98,7 @@ public:
 	GET_SET_MACRO(HOST, Clip, bool)
 
 protected:
-	Shape					Shape;						/*! Object shape */
+    Shape					shape;						/*! Object shape */
 	bool					Visible;					/*! Determines object visibility */
 	int						DiffuseTextureID;			/*! Diffuse texture ID */
 	int						SpecularTextureID;			/*! Specular texture ID */

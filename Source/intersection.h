@@ -64,7 +64,7 @@ public:
 		@param[in] Other Intersection to copy
 		@return Intersection
 	*/
-	HOST_DEVICE Intersection& Intersection::operator = (const Intersection& Other)
+    HOST_DEVICE Intersection& operator = (const Intersection& Other)
 	{
 		this->Valid			= Other.Valid;
 		this->Front			= Other.Front;

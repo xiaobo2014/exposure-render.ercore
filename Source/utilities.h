@@ -20,6 +20,7 @@
 #include "enums.h"
 #include "exception.h"
 #include "timestamp.h"
+#include <stdint.h>
 
 #include <cuda_runtime.h>
 
@@ -101,11 +102,11 @@ HOST_DEVICE inline float GetNearestGreaterPowerOfTwo(const float& x)
 }
 
 HOST_DEVICE inline bool IsPowerOfTwo(const float f) {
-	// source: http://cottonvibes.blogspot.com/2010/08/checking-if-float-is-power-of-2.html
-	unsigned __int32& i = (unsigned __int32&)f;
-	unsigned __int32  e = (i>>23) & 0xff;
-	unsigned __int32  m =  i & 0x7fffff;
-	return !m && e >= 127;
+    // source: http://cottonvibes.blogspot.com/2010/08/checking-if-float-is-power-of-2.html
+    uint32_t& i = (uint32_t&)f;
+    uint32_t  e = (i>>23) & 0xff;
+    uint32_t  m =  i & 0x7fffff;
+    return !m && e >= 127;
 }
 
 }

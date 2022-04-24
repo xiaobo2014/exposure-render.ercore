@@ -17,6 +17,7 @@
 #pragma once
 
 #include "hysteresis.h"
+#include "string"
 
 namespace ExposureRender
 {
@@ -45,11 +46,11 @@ public:
 	*/
 	HOST Statistic& operator = (const Statistic& Other)
 	{
-		strcpy_s(this->Name, MAX_CHAR_SIZE, Other.Name);
-		strcpy_s(this->ValueFormat, MAX_CHAR_SIZE, Other.ValueFormat);
-		strcpy_s(this->Unit, MAX_CHAR_SIZE, Other.Unit);
+        //strcpy(this->Name, MAX_CHAR_SIZE, Other.Name);
+        //strcpy_s(this->ValueFormat, MAX_CHAR_SIZE, Other.ValueFormat);
+        //strcpy_s(this->Unit, MAX_CHAR_SIZE, Other.Unit);
 		
-		this->Hysteresis = Other.Hysteresis;
+        this->hysteresis = Other.hysteresis;
 
 		return *this;
 	}
@@ -62,11 +63,11 @@ public:
 	*/
 	HOST void AddValue(const float& Value, const char* Name, const char* ValueFormat, const char* Unit)
 	{
-		this->Hysteresis.AddValue(Value);
+        this->hysteresis.AddValue(Value);
 
-		strcpy_s(this->Name, MAX_CHAR_SIZE, Name);
-		strcpy_s(this->ValueFormat, MAX_CHAR_SIZE, ValueFormat);
-		strcpy_s(this->Unit, MAX_CHAR_SIZE, Unit);
+        //strcpy_s(this->Name, MAX_CHAR_SIZE, Name);
+        //strcpy_s(this->ValueFormat, MAX_CHAR_SIZE, ValueFormat);
+        //strcpy_s(this->Unit, MAX_CHAR_SIZE, Unit);
 	}
 
 	/*! Adds a value 
@@ -74,7 +75,7 @@ public:
 	*/
 	HOST void AddValue(const float& Value)
 	{
-		this->Hysteresis.AddValue(Value);
+        this->hysteresis.AddValue(Value);
 	}
 
 	/*! Gets the name string
@@ -90,7 +91,7 @@ public:
 	*/
 	HOST void SetName(const char* Name)
 	{
-		sprintf_s(this->Name, MAX_CHAR_SIZE, Name);
+        //sprintf_s(this->Name, MAX_CHAR_SIZE, Name);
 	}
 	
 	/*! Gets the value format string
@@ -106,7 +107,7 @@ public:
 	*/
 	HOST void SetValueFormat(const char* ValueFormat)
 	{
-		sprintf_s(this->ValueFormat, MAX_CHAR_SIZE, ValueFormat);
+        //sprintf_s(this->ValueFormat, MAX_CHAR_SIZE, ValueFormat);
 	}
 	
 	/*! Gets the unit string
@@ -122,7 +123,7 @@ public:
 	*/
 	HOST void SetUnit(const char* Unit)
 	{
-		sprintf_s(this->Unit, MAX_CHAR_SIZE, Unit);
+        //sprintf_s(this->Unit, MAX_CHAR_SIZE, Unit);
 	}
 
 	/*! Resets the statistic */
@@ -137,7 +138,7 @@ public:
 		std::string tempUnit = "no unit";
 		this->SetUnit(tempUnit.c_str());
 
-		this->Hysteresis.Reset();
+        this->hysteresis.Reset();
 	}
 
 	/*! Gets the filtered value
@@ -145,14 +146,14 @@ public:
 	*/
 	HOST float GetValue() const
 	{
-		return this->Hysteresis.GetFilteredValue();
+        return this->hysteresis.GetFilteredValue();
 	}
 
 protected:
 	char						Name[MAX_CHAR_SIZE];				/*! Name string */
 	char						ValueFormat[MAX_CHAR_SIZE];			/*! Value format */
 	char						Unit[MAX_CHAR_SIZE];				/*! Unit */
-	Hysteresis<float, 64>		Hysteresis;							/*! Hysteresis */
+    Hysteresis<float, 64>		hysteresis;							/*! Hysteresis */
 };
 
 }

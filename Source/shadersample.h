@@ -53,7 +53,7 @@ public:
 		@param[in] Other Shader sample to copy
 		@return Shader sample
 	*/
-	HOST_DEVICE ShaderSample& ShaderSample::operator=(const ShaderSample& Other)
+    HOST_DEVICE ShaderSample& operator=(const ShaderSample& Other)
 	{
 		this->Component	= Other.Component;
 		this->Dir 		= Other.Dir;

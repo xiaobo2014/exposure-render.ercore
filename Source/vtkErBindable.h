@@ -22,7 +22,7 @@
 #include "exposurerender.h"
 
 using namespace ExposureRender;
-
+/*
 #define ER_BINDABLE(type, name)												\
 																			\
 class VTK_ER_EXPORT vtkHostBindable##type##									\
@@ -51,9 +51,151 @@ public:																		\
 	ExposureRender::Host##type	Bindable;									\
 																			\
 };
+*/
+//ER_BINDABLE(Tracer)
+//ER_BINDABLE(Volume)
+//ER_BINDABLE(Object)
+//ER_BINDABLE(Texture)
+//ER_BINDABLE(Bitmap)
 
-ER_BINDABLE(Tracer)
-ER_BINDABLE(Volume)
-ER_BINDABLE(Object)
-ER_BINDABLE(Texture)
-ER_BINDABLE(Bitmap)
+
+//ER_BINDABLE(Tracer, Tracer)
+//ER_BINDABLE(Volume, Volume)
+//ER_BINDABLE(Object, Object)
+//ER_BINDABLE(Texture, Texture)
+//ER_BINDABLE(Bitmap, Bitmap)
+
+class VTK_ER_EXPORT vtkHostBindableTracer
+{
+public:
+    vtkHostBindableTracer()
+    {
+        ER_CALL(this->Bind());
+    }
+
+    virtual ~vtkHostBindableTracer()
+    {
+        ER_CALL(this->Unbind());
+    }
+
+    void Bind()
+    {
+        ExposureRender::BindTracer(this->Bindable, true);
+    }
+
+    void Unbind()
+    {
+        ExposureRender::BindTracer(this->Bindable, false);
+    }
+
+    ExposureRender::HostTracer	Bindable;
+
+};
+
+class VTK_ER_EXPORT vtkHostBindableVolume
+{
+public:
+    vtkHostBindableVolume()
+    {
+        ER_CALL(this->Bind());
+    }
+
+    virtual ~vtkHostBindableVolume()
+    {
+        ER_CALL(this->Unbind());
+    }
+
+    void Bind()
+    {
+        ExposureRender::BindVolume(this->Bindable, true);
+    }
+
+    void Unbind()
+    {
+        ExposureRender::BindVolume(this->Bindable, false);
+    }
+
+    ExposureRender::HostVolume	Bindable;
+
+};
+
+class VTK_ER_EXPORT vtkHostBindableObject
+{
+public:
+    vtkHostBindableObject()
+    {
+        ER_CALL(this->Bind());
+    }
+
+    virtual ~vtkHostBindableObject()
+    {
+        ER_CALL(this->Unbind());
+    }
+
+    void Bind()
+    {
+        ExposureRender::BindObject(this->Bindable, true);
+    }
+
+    void Unbind()
+    {
+        ExposureRender::BindObject(this->Bindable, false);
+    }
+
+    ExposureRender::HostObject	Bindable;
+
+};
+
+class VTK_ER_EXPORT vtkHostBindableTexture
+{
+public:
+    vtkHostBindableTexture()
+    {
+        ER_CALL(this->Bind());
+    }
+
+    virtual ~vtkHostBindableTexture()
+    {
+        ER_CALL(this->Unbind());
+    }
+
+    void Bind()
+    {
+        ExposureRender::BindTexture(this->Bindable, true);
+    }
+
+    void Unbind()
+    {
+        ExposureRender::BindTexture(this->Bindable, false);
+    }
+
+    ExposureRender::HostTexture	Bindable;
+
+};
+
+class VTK_ER_EXPORT vtkHostBindableBitmap
+{
+public:
+    vtkHostBindableBitmap()
+    {
+        ER_CALL(this->Bind());
+    }
+
+    virtual ~vtkHostBindableBitmap()
+    {
+        ER_CALL(this->Unbind());
+    }
+
+    void Bind()
+    {
+        ExposureRender::BindBitmap(this->Bindable, true);
+    }
+
+    void Unbind()
+    {
+        ExposureRender::BindBitmap(this->Bindable, false);
+    }
+
+    ExposureRender::HostBitmap	Bindable;
+
+};

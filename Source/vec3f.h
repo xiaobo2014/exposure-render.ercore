@@ -264,7 +264,7 @@ static inline HOST_DEVICE float ClampedDot(const Vec3f& A, const Vec3f& B)
 */
 static inline HOST_DEVICE float ClampedAbsDot(const Vec3f& A, const Vec3f& B)
 {
-	return Clamp(fabs(A.Dot(B)), 0.0f, 1.0f);
+        return Clamp(float(fabs(A.Dot(B))), 0.0f, 1.0f);
 };
 
 /*! Cross product

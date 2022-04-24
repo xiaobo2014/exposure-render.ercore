@@ -96,7 +96,7 @@ void vtkErTracer::BeforeRender(vtkRenderer* Renderer, vtkVolume* Volume)
 
 	if (this->VolumePropertyTimeStamp < this->VolumeProperty->GetMTime())
 	{
-		this->VolumeProperty->RequestData(this->Tracer.GetVolumeProperty());
+        this->VolumeProperty->RequestData(this->Tracer.GetvolumeProperty());
 		
 		this->VolumePropertyTimeStamp = this->VolumeProperty->GetMTime();
 		this->Tracer.Modified();
@@ -111,7 +111,7 @@ void vtkErTracer::BeforeRender(vtkRenderer* Renderer, vtkVolume* Volume)
 		delete[] this->ImageBuffer;
 		this->ImageBuffer = new ExposureRender::ColorRGBAuc[this->LastRenderSize[0] * this->LastRenderSize[1]];
 
-		this->Tracer.GetCamera().SetFilmSize(this->LastRenderSize);
+        this->Tracer.Getcamera().SetFilmSize(this->LastRenderSize);
 		this->Tracer.Modified();
 	}
 
@@ -119,7 +119,7 @@ void vtkErTracer::BeforeRender(vtkRenderer* Renderer, vtkVolume* Volume)
 	
 	if (Camera && Camera->GetMTime() != this->CameraTimeStamp)
 	{
-		Camera->RequestData(this->Tracer.GetCamera());
+        Camera->RequestData(this->Tracer.Getcamera());
 
 		this->CameraTimeStamp = Camera->GetMTime();
 		this->Tracer.Modified();
@@ -157,7 +157,7 @@ void vtkErTracer::BeforeRender(vtkRenderer* Renderer, vtkVolume* Volume)
 			if (ObjectData->Bindable.GetClip())
 				this->Tracer.GetClippingObjectIDs().Add(ObjectData->Bindable.ID);
 
-			ObjectData->Object->GetCameraOffset(Camera, ObjectData->Bindable.GetShape().GetAlignment().GetOffsetTM());
+            ObjectData->Object->GetCameraOffset(Camera, ObjectData->Bindable.Getshape().Getalignment().GetOffsetTM());
 			ObjectData->Bind();
 		}
 	}
@@ -180,7 +180,7 @@ void vtkErTracer::Render(vtkRenderer* Renderer, vtkVolume* Volume)
 
 	this->BeforeRender(Renderer, Volume);
 
-	ER_CALL(ExposureRender::Render(this->Tracer.ID, this->Statistics));
+    ER_CALL(ExposureRender::Render(this->Tracer.ID, this->statistics));
 	ER_CALL(ExposureRender::GetDisplayEstimate(this->Tracer.ID, this->ImageBuffer));
 
 	glDrawPixels(this->LastRenderSize[0], this->LastRenderSize[1], GL_RGBA, GL_UNSIGNED_BYTE, this->ImageBuffer);
@@ -235,16 +235,16 @@ void vtkErTracer::AfterRender(vtkRenderer* Renderer, vtkVolume* Volume)
 	{
 		std::string NameString, ValueString, UnitString;
 	
-		for (int i = 0; i < this->Statistics.GetCount(); i++)
+        for (int i = 0; i < this->statistics.GetCount(); i++)
 		{
-			Statistic Stat = this->Statistics.GetStatistic(i);
+            Statistic Stat = this->statistics.GetStatistic(i);
 
 			NameString.append(Stat.GetName());
 			NameString.append("\n");
 
 			char Value[MAX_CHAR_SIZE];
 						
-			sprintf_s(Value, MAX_CHAR_SIZE, Stat.GetValueFormat(), Stat.GetValue());
+            //sprintf_s(Value, MAX_CHAR_SIZE, Stat.GetValueFormat(), Stat.GetValue());
 
 			ValueString.append(Value);
 			ValueString.append("\n");

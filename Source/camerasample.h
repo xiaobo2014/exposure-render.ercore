@@ -43,7 +43,7 @@ public:
 		@param[in] Other Camera sample to copy
 		@return Camera sample
 	*/
-	HOST_DEVICE CameraSample& CameraSample::operator=(const CameraSample& Other)
+    HOST_DEVICE CameraSample& operator=(const CameraSample& Other)
 	{
 		this->FilmUV	= Other.FilmUV;
 		this->LensUV	= Other.LensUV;

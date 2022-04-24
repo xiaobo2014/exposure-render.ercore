@@ -83,7 +83,7 @@ int vtkErTexture::RequestDataObject(vtkInformation* vtkNotUsed(request), vtkInfo
 		TextureDataOut = vtkErTextureData::New();
 		OutInfo->Set(vtkDataObject::DATA_OBJECT(), TextureDataOut);
 		TextureDataOut->FastDelete();
-		TextureDataOut->SetPipelineInformation(OutInfo);
+        //TextureDataOut->SetPipelineInformation(OutInfo);
 
 		this->GetOutputPortInformation(0)->Set(vtkDataObject::DATA_EXTENT_TYPE(), TextureDataOut->GetExtentType());
 	}
@@ -112,7 +112,7 @@ int vtkErTexture::RequestData(vtkInformation* Request, vtkInformationVector** In
 	TextureDataOut->Bindable.SetType(this->GetTextureType());
 	TextureDataOut->Bindable.SetOutputLevel(this->GetOutputLevel());
 	
-	ExposureRender::Procedural& Procedural = TextureDataOut->Bindable.GetProcedural();
+    ExposureRender::Procedural& Procedural = TextureDataOut->Bindable.Getprocedural();
 
 	Procedural.SetType(this->GetProceduralType());
 	Procedural.SetUniformColor(ColorXYZf::FromRGBf(ColorRGBf(this->GetUniformColor()[0], this->GetUniformColor()[1], this->GetUniformColor()[2]).D));

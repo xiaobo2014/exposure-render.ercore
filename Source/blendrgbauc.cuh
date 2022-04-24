@@ -37,7 +37,7 @@ void BlendRGBAuc(Statistics& Statistics, Buffer2D<ColorRGBAuc>& InputA, Buffer2D
 	{
 		char Message[MAX_CHAR_SIZE];
 
-		sprintf_s(Message, MAX_CHAR_SIZE, "%s failed, InputA and InputB must have the same resolution", __FUNCTION__);
+        //sprintf_s(Message, MAX_CHAR_SIZE, "%s failed, InputA and InputB must have the same resolution", __FUNCTION__);
 
 		throw(Exception(Enums::Warning, Message));
 	}

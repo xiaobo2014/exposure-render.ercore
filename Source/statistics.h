@@ -47,7 +47,7 @@ public:
 	HOST Statistics& operator = (const Statistics& Other)
 	{
 		for (int i = 0; i < MAX_NO_TIMINGS; i++)
-			this->Statistic[i] = Other.Statistic[i];
+            this->statistic[i] = Other.statistic[i];
 
 		this->Count = Other.Count;
 
@@ -64,20 +64,20 @@ public:
 
 		for (int i = 0; i < MAX_NO_TIMINGS; i++)
 		{
-			if (strcmp(this->Statistic[i].GetName(), Name) == 0)
+            if (strcmp(this->statistic[i].GetName(), Name) == 0)
 				ID = i;
 		}
 
 		if (ID >= 0)
 		{
-			this->Statistic[ID].AddValue(Value);
+            this->statistic[ID].AddValue(Value);
 		}
 		else
 		{
 			if (this->Count < MAX_NO_TIMINGS)
 			{
-				this->Statistic[this->Count].Reset();
-				this->Statistic[this->Count].AddValue(Value, Name, ValueFormat, Unit);
+                this->statistic[this->Count].Reset();
+                this->statistic[this->Count].AddValue(Value, Name, ValueFormat, Unit);
 
 				this->Count++;
 			}
@@ -86,13 +86,13 @@ public:
 	
 	GET_MACRO(HOST, Count, int);
 	
-	HOST Statistic GetStatistic(const int& Index) const
+    HOST Statistic GetStatistic(const int& Index) const
 	{
-		return this->Statistic[Index];
+        return this->statistic[Index];
 	}
 
 protected:
-	Statistic		Statistic[MAX_NO_TIMINGS];		/*! Statistic array */
+    Statistic		statistic[MAX_NO_TIMINGS];		/*! Statistic array */
 	int				Count;							/*! Number of timings */
 };
 

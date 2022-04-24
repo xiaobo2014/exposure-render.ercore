@@ -104,7 +104,7 @@ int vtkErObject::RequestDataObject(vtkInformation* vtkNotUsed(request), vtkInfor
 		Output->Object = this;
 		OutInfo->Set(vtkDataObject::DATA_OBJECT(), Output);
 		Output->FastDelete();
-		Output->SetPipelineInformation(OutInfo);
+        //Output->SetPipelineInformation(OutInfo);
 
 		this->GetOutputPortInformation(0)->Set(vtkDataObject::DATA_EXTENT_TYPE(), Output->GetExtentType());
 	}
@@ -129,7 +129,7 @@ int vtkErObject::RequestData(vtkInformation* Request, vtkInformationVector** Inp
 	if (!ObjectDataOut)
 		return 0;
 
-	vtkErShape::RequestData(ObjectDataOut->Bindable.GetShape());
+    vtkErShape::RequestData(ObjectDataOut->Bindable.Getshape());
 
 	vtkErTextureData* Diffuse = vtkErTextureData::SafeDownCast(this->GetInputDataObject(DiffuseTexturePort, 0));
 

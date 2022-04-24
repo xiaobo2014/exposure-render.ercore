@@ -190,7 +190,7 @@ public:
 		{
 			char Message[MAX_CHAR_SIZE];
 
-			sprintf_s(Message, MAX_CHAR_SIZE, "%s failed, resource item with ID:%d does not exist", __FUNCTION__, i);
+                        //sprintf_s(Message, MAX_CHAR_SIZE, "%s failed, resource item with ID:%d does not exist", __FUNCTION__, i);
 
 			throw(Exception(Enums::Warning, Message));
 		}

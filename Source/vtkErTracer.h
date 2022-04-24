@@ -94,5 +94,5 @@ private:
 	vtkSmartPointer<vtkTextActor>			NameTextActor;
 	vtkSmartPointer<vtkTextActor>			ValueTextActor;
 	vtkSmartPointer<vtkTextActor>			UnitTextActor;
-	Statistics								Statistics;
+    Statistics								statistics;
 };

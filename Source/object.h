@@ -69,7 +69,7 @@ public:
 		TimeStamp::operator = (Other);
 
 		this->Visible	= Other.GetVisible();
-		this->Shape		= Other.GetShape();
+        this->Shape		= Other.Getshape();
 
 		if (Other.GetDiffuseTextureID() >= 0)
 		{

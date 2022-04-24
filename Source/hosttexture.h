@@ -32,7 +32,7 @@ public:
 		Type(Enums::Procedural),
 		OutputLevel(1.0f),
 		BitmapID(-1),
-		Procedural(),
+        procedural(),
 		Offset(0.0f),
 		Repeat(0.0f),
 		Flip(0)
@@ -47,7 +47,7 @@ public:
 		Type(Enums::Procedural),
 		OutputLevel(1.0f),
 		BitmapID(-1),
-		Procedural(),
+        procedural(),
 		Offset(0.0f),
 		Repeat(0.0f),
 		Flip(0)
@@ -66,7 +66,7 @@ public:
 		this->Type			= Other.Type;
 		this->OutputLevel	= Other.OutputLevel;
 		this->BitmapID		= Other.BitmapID;
-		this->Procedural	= Other.Procedural;
+        this->procedural	= Other.procedural;
 		this->Offset		= Other.Offset;
 		this->Repeat		= Other.Repeat;
 		this->Flip			= Other.Flip;
@@ -77,9 +77,9 @@ public:
 	GET_SET_MACRO(HOST, Type, Enums::TextureType)
 	GET_SET_MACRO(HOST, OutputLevel, float)
 	GET_SET_MACRO(HOST, BitmapID, int)
-	GET_MACRO(HOST, Procedural, Procedural)
-	GET_REF_MACRO(HOST, Procedural, Procedural)
-	SET_MACRO(HOST, Procedural, Procedural)
+    GET_MACRO(HOST, procedural, Procedural)
+    GET_REF_MACRO(HOST, procedural, Procedural)
+    SET_MACRO(HOST, procedural, Procedural)
 	GET_SET_MACRO(HOST, Offset, Vec2f)
 	GET_SET_MACRO(HOST, Repeat, Vec2f)
 	GET_SET_MACRO(HOST, Flip, Vec2i)
@@ -88,7 +88,7 @@ protected:
 	Enums::TextureType		Type;				/*! Texture type */
 	float					OutputLevel;		/*! Output level */
 	int						BitmapID;			/*! Bitmap ID */
-	Procedural				Procedural;			/*! Procedural */
+    Procedural				procedural;			/*! Procedural */
 	Vec2f					Offset;				/*! UV offset coordinates */
 	Vec2f					Repeat;				/*! UV repeat coordinates */
 	Vec2i					Flip;				/*! UV flip coordinates */

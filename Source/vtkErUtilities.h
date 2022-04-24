@@ -24,8 +24,7 @@ try																						\
 }																						\
 catch(ExposureRender::Exception& Exception)												\
 {																						\
-	char ErrorMessage[256];																\
-	sprintf_s(ErrorMessage, 256, "%s\n", Exception.GetMessage());						\
+    char ErrorMessage[256];																\
 																						\
 	switch (Exception.GetLevel())														\
 	{																					\

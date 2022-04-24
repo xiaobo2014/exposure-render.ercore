@@ -33,7 +33,7 @@ public:
 	HOST Exception(const Enums::ExceptionLevel& Level, const char* Message = "")
 	{
 		this->Level = Level;
-		sprintf_s(this->Message, MAX_CHAR_SIZE, "%s", Message);
+        //sprintf_s(this->Message, MAX_CHAR_SIZE, "%s", Message);
 	}
 	
 	/*! Destructor */
@@ -56,7 +56,7 @@ public:
 	HOST Exception& operator = (const Exception& Other)
 	{
 		this->Level = Other.Level;
-		sprintf_s(this->Message, MAX_CHAR_SIZE, "%s", Other.Message);
+        //sprintf(this->Message, MAX_CHAR_SIZE, "%s", Other.Message);
 
 		return *this;
 	}

@@ -69,10 +69,10 @@ public:
 		this->FilterMode	= Other.FilterMode;
 		this->AddressMode	= Other.AddressMode;
 		
-		if (this->TimeStamp != Other.TimeStamp)
+        if (this->timeStamp != Other.timeStamp)
 		{
 			this->Set(Other.MemoryType, Other.Resolution, Other.Data);
-			this->TimeStamp = Other.TimeStamp;
+            this->timeStamp = Other.timeStamp;
 		}
 
 		return *this;
@@ -104,7 +104,7 @@ public:
 
 		this->Resolution = Vec<int, NoDimensions>();
 
-		this->TimeStamp.Modified();
+        this->timeStamp.Modified();
 	}
 	
 	/*! Resets the memory owned by the buffer */
@@ -130,7 +130,7 @@ public:
 			}
 		}
 
-		this->TimeStamp.Modified();
+        this->timeStamp.Modified();
 	}
 	
 	/*! Resize the buffer
@@ -248,7 +248,7 @@ public:
 	*/
 	HOST void SetName(const char* pName)
 	{
-		sprintf_s(this->Name, MAX_CHAR_SIZE, "%s", pName);
+        //sprintf_s(this->Name, MAX_CHAR_SIZE, "%s", pName);
 		this->UpdateFullName();
 	}
 	
@@ -332,7 +332,7 @@ public:
 	/*! Flag the buffer as modified */
 	void Modified()
 	{
-		TimeStamp.Modified();
+        timeStamp.Modified();
 	}
 
 	/*! Gets the buffer's resolution 
@@ -351,7 +351,7 @@ public:
 		return this->Resolution.CumulativeProduct();
 	}
 	
-	TimeStamp					TimeStamp;						/*! Time last modified */
+    TimeStamp					timeStamp;						/*! Time last modified */
 
 protected:
 	/*! Gets the memory string
@@ -362,9 +362,12 @@ protected:
 	{
 		switch (MemoryUnit)
 		{
-			case Enums::KiloByte:	sprintf_s(pMemoryString, MAX_CHAR_SIZE, "%0.2f KB", this->GetMemorySize(Enums::KiloByte));		break;
-			case Enums::MegaByte:	sprintf_s(pMemoryString, MAX_CHAR_SIZE, "%0.2f MB", this->GetMemorySize(Enums::MegaByte));		break;
-			case Enums::GigaByte:	sprintf_s(pMemoryString, MAX_CHAR_SIZE, "%0.2f GB", this->GetMemorySize(Enums::GigaByte));		break;
+            case Enums::KiloByte:	//sprintf_s(pMemoryString, MAX_CHAR_SIZE, "%0.2f KB", this->GetMemorySize(Enums::KiloByte));
+            break;
+            case Enums::MegaByte:	//sprintf_s(pMemoryString, MAX_CHAR_SIZE, "%0.2f MB", this->GetMemorySize(Enums::MegaByte));
+            break;
+            case Enums::GigaByte:	//sprintf_s(pMemoryString, MAX_CHAR_SIZE, "%0.2f GB", this->GetMemorySize(Enums::GigaByte));
+            break;
 		}
 	}
 	
@@ -376,19 +379,19 @@ protected:
 		switch (this->MemoryType)
 		{
 			case Enums::Host:
-				sprintf_s(MemoryTypeName, MAX_CHAR_SIZE, "%s", "H");
+                //sprintf_s(MemoryTypeName, MAX_CHAR_SIZE, "%s", "H");
 				break;
 
 			case Enums::Device:
-				sprintf_s(MemoryTypeName, MAX_CHAR_SIZE, "%s", "D");
+                //sprintf_s(MemoryTypeName, MAX_CHAR_SIZE, "%s", "D");
 				break;
 
 			default:
-				sprintf_s(MemoryTypeName, MAX_CHAR_SIZE, "%s", "U");
+                //sprintf_s(MemoryTypeName, MAX_CHAR_SIZE, "%s", "U");
 				break;
 		}
 
-		sprintf_s(this->FullName, MAX_CHAR_SIZE, "['%s', %s]", this->Name, MemoryTypeName);
+        //sprintf_s(this->FullName, MAX_CHAR_SIZE, "['%s', %s]", this->Name, MemoryTypeName);
 	}
 
 

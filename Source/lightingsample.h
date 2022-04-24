@@ -45,7 +45,7 @@ public:
 		@param[in] Other Lighting sample to copy
 		@return Lighting sample
 	*/
-	HOST_DEVICE LightingSample& LightingSample::operator=(const LightingSample& Other)
+    HOST_DEVICE LightingSample& operator=(const LightingSample& Other)
 	{
 		this->ShaderSample	= Other.ShaderSample;
 		this->LightSample	= Other.LightSample;

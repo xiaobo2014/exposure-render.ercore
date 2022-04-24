@@ -17,6 +17,7 @@
 #pragma once
 
 #include "filter.h"
+#include <iostream>
 
 namespace ExposureRender
 {
@@ -153,9 +154,11 @@ public:
 				char Weight[MAX_CHAR_SIZE];
 
 				if (i == FilterRadius * 2)
-					sprintf_s(Weight, MAX_CHAR_SIZE, "%0.2f\n", this->Weight[i][j]);
+                    std::cout<<endl;
+                    //sprintf_s(Weight, MAX_CHAR_SIZE, "%0.2f\n", this->Weight[i][j]);
 				else
-					sprintf_s(Weight, MAX_CHAR_SIZE, "%0.2f, ", this->Weight[i][j]);
+                    std::cout<<endl;
+                    //sprintf_s(Weight, MAX_CHAR_SIZE, "%0.2f, ", this->Weight[i][j]);
 
 				Message.append(Weight);
 			}

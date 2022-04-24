@@ -36,7 +36,7 @@ public:
 		@param[in] Other Surface sample to copy
 		@return Surface sample
 	*/
-	HOST_DEVICE SurfaceSample& SurfaceSample::operator = (const SurfaceSample& Other)
+    HOST_DEVICE SurfaceSample& operator = (const SurfaceSample& Other)
 	{
 		this->P		= Other.P;
 		this->N		= Other.N;

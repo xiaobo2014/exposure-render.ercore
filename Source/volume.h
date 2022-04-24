@@ -69,11 +69,11 @@ public:
 		@param[in] Other Volume to copy
 		@return Copied volume
 	*/
-	HOST Volume& Volume::operator = (const HostVolume& Other)
+    HOST Volume& operator = (const HostVolume& Other)
 	{
 		TimeStamp::operator = (Other);
 
-		this->Transform			= Other.GetAlignment().GetTransform();
+        this->Transform			= Other.Getalignment().GetTransform();
 		this->Voxels			= Other.Voxels;
 		this->AcceleratorType	= Other.GetAcceleratorType();
 

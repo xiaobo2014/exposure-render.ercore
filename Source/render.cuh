@@ -28,6 +28,7 @@
 #include "gaussianfilterxyzaf.cuh"
 
 #include <thrust/remove.h>
+#include <thrust/device_ptr.h>
 
 #define SAMPLE_LIGHT
 #define SAMPLE_SHADER

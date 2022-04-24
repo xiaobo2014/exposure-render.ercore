@@ -89,7 +89,7 @@ public:
 	HOST_DEVICE void SetName(const char* pName)
 	{
 #ifndef __CUDACC__SELF
-		sprintf_s(this->Name, MAX_CHAR_SIZE, "%s", pName);
+        //sprintf_s(this->Name, MAX_CHAR_SIZE, "%s", pName);
 #endif
 	}
 

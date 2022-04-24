@@ -59,7 +59,7 @@ HOST_DEVICE ColorXYZf EvaluateTexture(Texture* pTexture, const int& ID, const Ve
 	{
 		case Enums::Procedural:
 		{
-			L = pTexture->Procedural.Evaluate(TextureUV);
+			L = pTexture->procedural.Evaluate(TextureUV);
 			break;
 		}
 

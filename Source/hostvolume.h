@@ -31,7 +31,7 @@ public:
 	/*! Default constructor */
 	HOST HostVolume() :
 		HostBase(),
-		Alignment(),
+        alignment(),
 		Voxels("Host Voxels", Enums::Host),
 		NormalizeSize(false),
 		Spacing(1.0f),
@@ -44,7 +44,7 @@ public:
 	*/
 	HOST HostVolume(const HostVolume& Other) :
 		HostBase(),
-		Alignment(),
+        alignment(),
 		Voxels("Host Voxels", Enums::Host),
 		NormalizeSize(false),
 		Spacing(1.0f),
@@ -57,11 +57,11 @@ public:
 		@param[in] Other Host volume to copy
 		@return Copied host volume
 	*/
-	HOST HostVolume& HostVolume::operator = (const HostVolume& Other)
+    HOST HostVolume& operator = (const HostVolume& Other)
 	{
 		HostBase::operator = (Other);
 
-		this->Alignment			= Other.Alignment;
+        this->alignment			= Other.alignment;
 		this->Voxels			= Other.Voxels;
 		this->NormalizeSize		= Other.NormalizeSize;
 		this->Spacing			= Other.Spacing;
@@ -125,16 +125,16 @@ public:
 		return MaximumGradientMagnitude;
 	}
 	
-	GET_MACRO(HOST, Alignment, Alignment)
-	GET_REF_MACRO(HOST, Alignment, Alignment)
-	SET_MACRO(HOST, Alignment, Alignment)
+    GET_MACRO(HOST, alignment, Alignment)
+    GET_REF_MACRO(HOST, alignment, Alignment)
+    SET_MACRO(HOST, alignment, Alignment)
 	GET_REF_MACRO(HOST, Voxels, Buffer3D<unsigned short>)
 	GET_SET_MACRO(HOST, NormalizeSize, bool)
 	GET_SET_MACRO(HOST, Spacing, Vec3f)
 	GET_SET_MACRO(HOST, AcceleratorType, Enums::AcceleratorType)
 
 protected:
-	Alignment					Alignment;				/*! Alignment */
+    Alignment					alignment;				/*! Alignment */
 	Buffer3D<unsigned short>	Voxels;					/*! Voxels */
 	bool						NormalizeSize;			/*! Normalized access */
 	Vec3f						Spacing;				/*! Spacing */

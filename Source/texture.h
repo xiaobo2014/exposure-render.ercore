@@ -31,7 +31,7 @@ public:
 		Type(Enums::Procedural),
 		OutputLevel(1.0f),
 		BitmapID(-1),
-		Procedural(),
+        procedural(),
 		Offset(0.0f),
 		Repeat(0.0f),
 		Flip(0)
@@ -46,7 +46,7 @@ public:
 		Type(Enums::Procedural),
 		OutputLevel(1.0f),
 		BitmapID(-1),
-		Procedural(),
+        procedural(),
 		Offset(0.0f),
 		Repeat(0.0f),
 		Flip(0)
@@ -77,7 +77,7 @@ public:
 			this->BitmapID = -1;
 		}
 
-		this->Procedural	= Other.GetProcedural();
+        this->procedural	= Other.Getprocedural();
 		this->Offset		= Other.GetOffset();
 		this->Repeat		= Other.GetRepeat();
 		this->Flip			= Other.GetFlip();
@@ -88,7 +88,7 @@ public:
 	Enums::TextureType		Type;				/*! Texture type */
 	float					OutputLevel;		/*! Output level */
 	int						BitmapID;			/*! Bitmap ID */
-	Procedural				Procedural;			/*! Procedural */
+    Procedural				procedural;			/*! Procedural */
 	Vec2f					Offset;				/*! Offset */
 	Vec2f					Repeat;				/*! Repeat */
 	Vec2i					Flip;				/*! Flip */

@@ -87,7 +87,7 @@ public:
 		@param[in] Other Camera to copy
 		@return Camera
 	*/
-	HOST Camera& Camera::operator = (const Camera& Other)
+    HOST Camera& operator = (const Camera& Other)
 	{
 		TimeStamp::operator = (Other);
 

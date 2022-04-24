@@ -29,13 +29,13 @@ public:
 	/*! Default constructor */
 	HOST_DEVICE Shape() :
 		Type(Enums::Plane),
-		Plane(),
-		Disk(),
-		Ring(),
-		Sphere(),
-		Box(),
-		Alignment(),
-		Transform(),
+        plane(),
+        disk(),
+        ring(),
+        sphere(),
+        box(),
+        alignment(),
+        transform(),
 		Area(0.0f)
 	{
 	}
@@ -55,13 +55,13 @@ public:
 	HOST_DEVICE Shape& operator = (const Shape& Other)
 	{
 		this->Type			= Other.Type;
-		this->Plane			= Other.Plane;
-		this->Disk			= Other.Disk;
-		this->Ring			= Other.Ring;
-		this->Sphere		= Other.Sphere;
-		this->Box			= Other.Box;
-		this->Alignment		= Other.Alignment;
-		this->Transform		= Other.Transform;
+        this->plane			= Other.plane;
+        this->disk			= Other.disk;
+        this->ring			= Other.ring;
+        this->sphere		= Other.sphere;
+        this->box			= Other.box;
+        this->alignment		= Other.alignment;
+        this->transform		= Other.transform;
 		this->Area			= Other.Area;
 
 		this->Update();
@@ -74,15 +74,15 @@ public:
 	{
 		switch (this->Type)
 		{
-			case Enums::Plane:		this->Area = Plane.GetArea();		break;
-			case Enums::Disk:		this->Area = Disk.GetArea();		break;
-			case Enums::Ring:		this->Area = Ring.GetArea();		break;
-			case Enums::Box:		this->Area = Box.GetArea();			break;
-			case Enums::Sphere:		this->Area = Sphere.GetArea();		break;
+            case Enums::Plane:		this->Area = plane.GetArea();		break;
+            case Enums::Disk:		this->Area = disk.GetArea();		break;
+            case Enums::Ring:		this->Area = ring.GetArea();		break;
+            case Enums::Box:		this->Area = box.GetArea();			break;
+            case Enums::Sphere:		this->Area = sphere.GetArea();		break;
 //			case Enums::Cylinder:	this->Area = Cylinder.GetArea();	break;
 		}
 
-		this->Transform = this->Alignment.GetTransform();
+        this->transform = this->alignment.GetTransform();
 	}
 	
 	/*! Test whether ray \a R intersects the shape
@@ -91,15 +91,15 @@ public:
 	*/
 	HOST_DEVICE bool Intersects(const Ray& R) const
 	{
-		const Ray LocalShapeR = TransformRay(this->Transform.InvTM, R);
+        const Ray LocalShapeR = TransformRay(this->transform.InvTM, R);
 
 		switch (this->Type)
 		{
-			case Enums::Plane:		return Plane.Intersects(LocalShapeR);
-			case Enums::Disk:		return Disk.Intersects(LocalShapeR);
-			case Enums::Ring:		return Ring.Intersects(LocalShapeR);
-			case Enums::Box:		return Box.Intersects(LocalShapeR);
-			case Enums::Sphere:		return Sphere.Intersects(LocalShapeR);
+            case Enums::Plane:		return plane.Intersects(LocalShapeR);
+            case Enums::Disk:		return disk.Intersects(LocalShapeR);
+            case Enums::Ring:		return ring.Intersects(LocalShapeR);
+            case Enums::Box:		return box.Intersects(LocalShapeR);
+            case Enums::Sphere:		return sphere.Intersects(LocalShapeR);
 //			case Enums::Cylinder:	return Plane.Intersects(LocalShapeR);
 		}
 
@@ -113,25 +113,25 @@ public:
 	*/
 	HOST_DEVICE bool Intersect(const Ray& R, Intersection& Int) const
 	{
-		const Ray LocalShapeR = TransformRay(this->Transform.InvTM, R);
+        const Ray LocalShapeR = TransformRay(this->transform.InvTM, R);
 
 		bool Intersects = false;
 
 		switch (this->Type)
 		{
-			case Enums::Plane:		Intersects = Plane.Intersect(LocalShapeR, Int);		break;
-			case Enums::Disk:		Intersects = Disk.Intersect(LocalShapeR, Int);		break;
-			case Enums::Ring:		Intersects = Ring.Intersect(LocalShapeR, Int);		break;
-			case Enums::Box:		Intersects = Box.Intersect(LocalShapeR, Int);		break;
-			case Enums::Sphere:		Intersects = Sphere.Intersect(LocalShapeR, Int);		break;
+            case Enums::Plane:		Intersects = plane.Intersect(LocalShapeR, Int);		break;
+            case Enums::Disk:		Intersects = disk.Intersect(LocalShapeR, Int);		break;
+            case Enums::Ring:		Intersects = ring.Intersect(LocalShapeR, Int);		break;
+            case Enums::Box:		Intersects = box.Intersect(LocalShapeR, Int);		break;
+            case Enums::Sphere:		Intersects = sphere.Intersect(LocalShapeR, Int);		break;
 //			case Enums::Cylinder:	Intersects = Plane.Intersect(LocalShapeR, Int);		break;
 		}
 
 		if (Intersects)
 		{
 			Int.SetValid(true);
-			Int.SetP(TransformPoint(this->Transform.TM, Int.GetP()));
-			Int.SetN(TransformVector(this->Transform.TM, Int.GetN()));
+            Int.SetP(TransformPoint(this->transform.TM, Int.GetP()));
+            Int.SetN(TransformVector(this->transform.TM, Int.GetN()));
 			Int.SetT(Length(Int.GetP(), R.O));
 		}
 		
@@ -146,16 +146,16 @@ public:
 	{
 		switch (this->Type)
 		{
-			case Enums::Plane:		Plane.Sample(SS, UVW);		break;
-			case Enums::Disk:		Disk.Sample(SS, UVW);		break;
-			case Enums::Ring:		Ring.Sample(SS, UVW);		break;
-			case Enums::Box:		Box.Sample(SS, UVW);		break;
-			case Enums::Sphere:		Sphere.Sample(SS, UVW);		break;
+            case Enums::Plane:		plane.Sample(SS, UVW);		break;
+            case Enums::Disk:		disk.Sample(SS, UVW);		break;
+            case Enums::Ring:		ring.Sample(SS, UVW);		break;
+            case Enums::Box:		box.Sample(SS, UVW);		break;
+            case Enums::Sphere:		sphere.Sample(SS, UVW);		break;
 //			case Enums::Cylinder:	Cylinder.Sample(SS, UVW);	break;
 		}
 
-		SS.P = TransformPoint(this->Transform.TM, SS.P);
-		SS.N = TransformVector(this->Transform.TM, SS.N);
+        SS.P = TransformPoint(this->transform.TM, SS.P);
+        SS.N = TransformVector(this->transform.TM, SS.N);
 	}
 	
 	/*! Returns if the shape is one sided or not
@@ -165,11 +165,11 @@ public:
 	{
 		switch (this->Type)
 		{
-			case Enums::Plane:		return this->Plane.GetOneSided();
-			case Enums::Disk:		return this->Disk.GetOneSided();
-			case Enums::Ring:		return this->Ring.GetOneSided();
-			case Enums::Box:		return this->Box.GetOneSided();
-			case Enums::Sphere:		return this->Sphere.GetOneSided();
+            case Enums::Plane:		return this->plane.GetOneSided();
+            case Enums::Disk:		return this->disk.GetOneSided();
+            case Enums::Ring:		return this->ring.GetOneSided();
+            case Enums::Box:		return this->box.GetOneSided();
+            case Enums::Sphere:		return this->sphere.GetOneSided();
 //			case Enums::Cylinder:	return this->Cylinder.GetOneSided();
 		}
 
@@ -181,15 +181,15 @@ public:
 	*/
 	HOST_DEVICE bool Inside(const Vec3f& P) const
 	{
-		const Vec3f LocalP = TransformPoint(this->Transform.InvTM, P);
+        const Vec3f LocalP = TransformPoint(this->transform.InvTM, P);
 
 		switch (this->Type)
 		{
-			case Enums::Plane:		return this->Plane.Inside(LocalP);
-			case Enums::Disk:		return this->Disk.Inside(LocalP);
-			case Enums::Ring:		return this->Ring.Inside(LocalP);
-			case Enums::Box:		return this->Box.Inside(LocalP);
-			case Enums::Sphere:		return this->Sphere.Inside(LocalP);
+            case Enums::Plane:		return this->plane.Inside(LocalP);
+            case Enums::Disk:		return this->disk.Inside(LocalP);
+            case Enums::Ring:		return this->ring.Inside(LocalP);
+            case Enums::Box:		return this->box.Inside(LocalP);
+            case Enums::Sphere:		return this->sphere.Inside(LocalP);
 //			case Enums::Cylinder:	return this->Cylinder.Inside(LocalP);
 		}
 
@@ -197,23 +197,23 @@ public:
 	}
 	
 	GET_SET_MACRO(HOST_DEVICE, Type, Enums::ShapeType)
-	GET_REF_SET_MACRO(HOST_DEVICE, Plane, Plane)
-	GET_REF_SET_MACRO(HOST_DEVICE, Disk, Disk)
-	GET_REF_SET_MACRO(HOST_DEVICE, Ring, Ring)
-	GET_REF_SET_MACRO(HOST_DEVICE, Sphere, Sphere)
-	GET_REF_SET_MACRO(HOST_DEVICE, Box, Box)
-	GET_REF_MACRO(HOST_DEVICE, Alignment, Alignment)
+    GET_REF_SET_MACRO(HOST_DEVICE, plane, Plane)
+    GET_REF_SET_MACRO(HOST_DEVICE, disk, Disk)
+    GET_REF_SET_MACRO(HOST_DEVICE, ring, Ring)
+    GET_REF_SET_MACRO(HOST_DEVICE, sphere, Sphere)
+    GET_REF_SET_MACRO(HOST_DEVICE, box, Box)
+    GET_REF_MACRO(HOST_DEVICE, alignment, Alignment)
 	GET_MACRO(HOST_DEVICE, Area, float)
 
 protected:
 	Enums::ShapeType	Type;			/*! Type of active shape */	
-	Plane				Plane;			/*! Plane shape */
-	Disk				Disk;			/*! Disk shape */
-	Ring				Ring;			/*! Ring shape */
-	Sphere				Sphere;			/*! Sphere shape */
-	Box					Box;			/*! Box shape */
-	Alignment			Alignment;		/*! Shape alignment */
-	Transform			Transform;		/*! Shape transform */
+    Plane				plane;			/*! Plane shape */
+    Disk				disk;			/*! Disk shape */
+    Ring				ring;			/*! Ring shape */
+    Sphere				sphere;			/*! Sphere shape */
+    Box					box;			/*! Box shape */
+    Alignment			alignment;		/*! Shape alignment */
+    Transform			transform;		/*! Shape transform */
 	float				Area;			/*! Area of the shape */
 };
 

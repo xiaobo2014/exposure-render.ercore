@@ -34,7 +34,7 @@ vtkErShape::vtkErShape()
 
 void vtkErShape::RequestData(ExposureRender::Shape& Shape)
 {
-	vtkErAlignment::RequestData(Shape.GetAlignment());
+    vtkErAlignment::RequestData(Shape.Getalignment());
 
 	Shape.SetType(this->GetShapeType());
 
@@ -42,31 +42,31 @@ void vtkErShape::RequestData(ExposureRender::Shape& Shape)
 	{
 		case Enums::Plane:
 		{
-			Shape.SetPlane(Plane(Vec2f(Size[0], Size[1]), this->GetOneSided()));
+            Shape.Setplane(Plane(Vec2f(Size[0], Size[1]), this->GetOneSided()));
 			break;
 		}
 
 		case Enums::Disk:
 		{
-			Shape.SetDisk(Disk(this->GetRadius(), this->GetOneSided()));
+            Shape.Setdisk(Disk(this->GetRadius(), this->GetOneSided()));
 			break;
 		}
 
 		case Enums::Ring:
 		{
-			Shape.SetRing(Ring(this->GetInnerRadius(), this->GetOuterRadius(), this->GetOneSided()));
+            Shape.Setring(Ring(this->GetInnerRadius(), this->GetOuterRadius(), this->GetOneSided()));
 			break;
 		}
 
 		case Enums::Sphere:
 		{
-			Shape.SetSphere(Sphere(this->GetRadius()));
+            Shape.Setsphere(Sphere(this->GetRadius()));
 			break;
 		}
 
 		case Enums::Box:
 		{
-			Shape.SetBox(Vec3f(Size[0], Size[1], Size[2]));
+            Shape.Setbox(Vec3f(Size[0], Size[1], Size[2]));
 			break;
 		}
 	}

@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include "randomseedbuffer1d.h"
+//#include "randomseedbuffer1d.h"
 #include "randomseedbuffer2d.h"
 #include "randomseedbuffer3d.h"
 

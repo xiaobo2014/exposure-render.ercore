@@ -60,10 +60,10 @@ public:
 		if (this->NoValues > 1)
 		{
 			for (int i = this->NoValues - 1; i > 0; i--)
-				D[i] = D[i - 1];
+                this->D[i] = this->D[i - 1];
 		}
 
-		D[0] = Value;
+        this->D[0] = Value;
 		
 		this->NoValues++;
 		

@@ -33,16 +33,16 @@ public:
 	/*! Constructor
 		@param[in,out] RNG Random number generator
 	*/
-	HOST_DEVICE MetroSample(RNG& RNG)
+    HOST_DEVICE MetroSample(RNG& rng)
 	{
-		this->LargeStep(RNG);
+        this->LargeStep(rng);
 	}
 
 	/*! Assignment operator
 		@param[in] Other Metropolis sample to copy
 		@return Metropolis sample
 	*/
-	HOST_DEVICE MetroSample& MetroSample::operator=(const MetroSample& Other)
+    HOST_DEVICE MetroSample& operator=(const MetroSample& Other)
 	{
 		this->LightingSample 	= Other.LightingSample;
 		this->CameraSample		= Other.CameraSample;
