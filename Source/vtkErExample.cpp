@@ -45,7 +45,12 @@
 // Specify volume file her (*.mhd)
 //char gVolumeFile[] = "C:\\Dropbox\\Work\\Data\\Volumes\\engine.mhd";
 //char gVolumeFile[] = "D:\\exposure-download\\volumes\\engine.mhd";
-char gVolumeFile[] = "D:\\DataTransfer\\aorta_coronary_chamber_image\\CHEN_MEIRONG.mhd";
+
+//windows
+//char gVolumeFile[] = "D:\\DataTransfer\\aorta_coronary_chamber_image\\CHEN_MEIRONG.mhd";
+
+
+char gVolumeFile[] = "/home/liuxiaobo/DataTransfer/aorta_coronary_chamber_image/CHEN_MEIRONG.mhd";
 
 //#define BACK_PLANE_ON
 #define KEY_LIGHT_ON
@@ -73,9 +78,9 @@ using namespace ExposureRender;
 
 int main(int, char *[])
 {
-    //InteractorRender();
+    InteractorRender();
 
-    OffScreenRender();
+    //OffScreenRender();
 
 	return EXIT_SUCCESS;
 }
@@ -152,7 +157,8 @@ void OffScreenRender()
     windowToImageFilter->SetInput(RenderWindow);
     windowToImageFilter->Update();
 
-    std::string pngFile = "D:\\exposure-render-ercore\\test.png";
+    //std::string pngFile = "D:\\exposure-render-ercore\\test.png";
+    std::string pngFile = "/home/liuxiaobo/ProjectCode/exposure/exposure-render.ercore/test.png";
     
     vtkSmartPointer<vtkPNGWriter> writer = vtkSmartPointer<vtkPNGWriter>::New();
     writer->SetFileName(pngFile.c_str());
