@@ -26,7 +26,7 @@ class vtkErVolumeData : public vtkDataObject, public vtkHostBindableVolume
 {
 public:
 	static vtkErVolumeData* New();
-    //vtkTypeRevisionMacro(vtkErVolumeData, vtkDataObject);
+    vtkTypeMacro(vtkErVolumeData, vtkDataObject);
 	
 protected:
 	vtkErVolumeData() {};
