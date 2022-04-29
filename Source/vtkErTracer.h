@@ -33,7 +33,7 @@ class vtkErTracerData : public vtkDataObject, public vtkHostBindableTracer
 {
 public:
 	static vtkErTracerData* New();
-	vtkTypeRevisionMacro(vtkErTracerData, vtkDataObject);
+    //vtkTypeRevisionMacro(vtkErTracerData, vtkDataObject);
 	
 protected:
 	vtkErTracerData() {};
@@ -48,7 +48,7 @@ class VTK_ER_EXPORT vtkErTracer : public vtkAbstractVolumeMapper
 {
 public:
 	static vtkErTracer* New();
-	vtkTypeRevisionMacro(vtkErTracer, vtkAbstractVolumeMapper);
+    //vtkTypeRevisionMacro(vtkErTracer, vtkAbstractVolumeMapper);
 
 	enum Ports
 	{

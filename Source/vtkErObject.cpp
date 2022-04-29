@@ -21,10 +21,10 @@
 #include "vtkErTexture.h"
 
 vtkStandardNewMacro(vtkErObjectData);
-vtkCxxRevisionMacro(vtkErObjectData, "$Revision: 1.0 $");
+//vtkCxxRevisionMacro(vtkErObjectData, "$Revision: 1.0 $");
 
 vtkStandardNewMacro(vtkErObject);
-vtkCxxRevisionMacro(vtkErObject, "$Revision: 1.0 $");
+//vtkCxxRevisionMacro(vtkErObject, "$Revision: 1.0 $");
 
 vtkErObject::vtkErObject(void)
 {

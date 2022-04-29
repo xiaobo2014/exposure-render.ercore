@@ -20,7 +20,7 @@
 #include "vtkErVolume.h"
 
 vtkStandardNewMacro(vtkErVolumeData);
-vtkCxxRevisionMacro(vtkErVolumeData, "$Revision: 1.0 $");
+//vtkCxxRevisionMacro(vtkErVolumeData, "$Revision: 1.0 $");
 
 vtkStandardNewMacro(vtkErVolume);
 

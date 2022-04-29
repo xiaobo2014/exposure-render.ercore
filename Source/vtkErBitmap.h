@@ -28,7 +28,7 @@ class vtkErBitmapData : public vtkDataObject, public vtkHostBindableBitmap
 {
 public:
 	static vtkErBitmapData* New();
-	vtkTypeRevisionMacro(vtkErBitmapData, vtkDataObject);
+    //vtkTypeRevisionMacro(vtkErBitmapData, vtkDataObject);
 	
 protected:
 	vtkErBitmapData() {};
@@ -43,7 +43,7 @@ class VTK_ER_EXPORT vtkErBitmap : public vtkAlgorithm
 {
 public:
 	static vtkErBitmap* New();
-	vtkTypeRevisionMacro(vtkErBitmap, vtkAlgorithm);
+    //vtkTypeRevisionMacro(vtkErBitmap, vtkAlgorithm);
 
 	enum Ports
 	{

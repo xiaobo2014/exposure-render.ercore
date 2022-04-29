@@ -30,7 +30,7 @@ class VTK_ER_EXPORT vtkErAlignment : public vtkAlgorithm
 {
 public:
 	static vtkErAlignment* New();
-	vtkTypeRevisionMacro(vtkErAlignment, vtkAlgorithm);
+    //vtkTypeRevisionMacro(vtkErAlignment, vtkAlgorithm);
 
 	void RequestData(ExposureRender::Alignment& Alignment);
 

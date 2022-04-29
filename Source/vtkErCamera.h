@@ -29,7 +29,7 @@ class VTK_ER_EXPORT vtkErCamera : public vtkOpenGLCamera
 {
 public:
 	static vtkErCamera *New();
-	vtkTypeRevisionMacro(vtkErCamera, vtkOpenGLCamera);
+    //vtkTypeRevisionMacro(vtkErCamera, vtkOpenGLCamera);
 
 	void RequestData(ExposureRender::Camera& Camera);
 

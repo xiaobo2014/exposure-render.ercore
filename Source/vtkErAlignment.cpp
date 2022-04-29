@@ -20,7 +20,7 @@
 #include "vtkErAlignment.h"
 
 vtkStandardNewMacro(vtkErAlignment);
-vtkCxxRevisionMacro(vtkErAlignment, "$Revision: 1.0 $");
+//vtkCxxRevisionMacro(vtkErAlignment, "$Revision: 1.0 $");
 
 vtkErAlignment::vtkErAlignment()
 {

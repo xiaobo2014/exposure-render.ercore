@@ -20,7 +20,7 @@
 #include "vtkErCamera.h"
 
 vtkStandardNewMacro(vtkErCamera);
-vtkCxxRevisionMacro(vtkErCamera, "$Revision: 1.0 $");
+//vtkCxxRevisionMacro(vtkErCamera, "$Revision: 1.0 $");
 
 vtkErCamera::vtkErCamera(void)
 {

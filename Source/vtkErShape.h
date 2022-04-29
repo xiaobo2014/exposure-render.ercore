@@ -24,7 +24,7 @@ class VTK_ER_EXPORT vtkErShape : public vtkErAlignment
 {
 public:
 	static vtkErShape* New();
-	vtkTypeRevisionMacro(vtkErShape, vtkErAlignment);
+    //vtkTypeRevisionMacro(vtkErShape, vtkErAlignment);
 
 	void RequestData(ExposureRender::Shape& Shape);
 

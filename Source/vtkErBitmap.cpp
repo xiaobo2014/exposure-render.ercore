@@ -20,10 +20,10 @@
 #include "vtkErBitmap.h"
 
 vtkStandardNewMacro(vtkErBitmapData);
-vtkCxxRevisionMacro(vtkErBitmapData, "$Revision: 1.0 $");
+//vtkCxxRevisionMacro(vtkErBitmapData, "$Revision: 1.0 $");
 
 vtkStandardNewMacro(vtkErBitmap);
-vtkCxxRevisionMacro(vtkErBitmap, "$Revision: 1.0 $");
+//vtkCxxRevisionMacro(vtkErBitmap, "$Revision: 1.0 $");
 
 vtkErBitmap::vtkErBitmap(void)
 {

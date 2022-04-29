@@ -30,7 +30,7 @@ class VTK_ER_EXPORT vtkErVolumeProperty : public vtkAlgorithm
 {
 public:
 	static vtkErVolumeProperty* New();
-	vtkTypeRevisionMacro(vtkErVolumeProperty, vtkAlgorithm);
+    //vtkTypeRevisionMacro(vtkErVolumeProperty, vtkAlgorithm);
 
 	void RequestData(ExposureRender::VolumeProperty& VolumeProperty);
 

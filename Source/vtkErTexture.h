@@ -30,7 +30,7 @@ class vtkErTextureData : public vtkDataObject, public vtkHostBindableTexture
 {
 public:
 	static vtkErTextureData* New();
-	vtkTypeRevisionMacro(vtkErTextureData, vtkDataObject);
+    //vtkTypeRevisionMacro(vtkErTextureData, vtkDataObject);
 	
 protected:
 	vtkErTextureData() {};
@@ -45,7 +45,7 @@ class VTK_ER_EXPORT vtkErTexture : public vtkAlgorithm
 {
 public:
 	static vtkErTexture* New();
-	vtkTypeRevisionMacro(vtkErTexture, vtkAlgorithm);
+    //vtkTypeRevisionMacro(vtkErTexture, vtkAlgorithm);
 
 	enum Ports
 	{

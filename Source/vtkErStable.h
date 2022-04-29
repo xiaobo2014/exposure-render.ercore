@@ -55,7 +55,7 @@
 #include <vtkPiecewiseFunction.h>
 #include <vtkColorTransferFunction.h>
 
-#include <vtkgl.h>
+//#include <vtkgl.h>
 
 // VTK image stuff
 #include <vtkImageData.h>

@@ -20,7 +20,7 @@
 #include "vtkErShape.h"
 
 vtkStandardNewMacro(vtkErShape);
-vtkCxxRevisionMacro(vtkErShape, "$Revision: 1.0 $");
+//vtkCxxRevisionMacro(vtkErShape, "$Revision: 1.0 $");
 
 vtkErShape::vtkErShape()
 {

@@ -25,10 +25,10 @@
 #include "vtkgl.h"
 
 vtkStandardNewMacro(vtkErTracerData);
-vtkCxxRevisionMacro(vtkErTracerData, "$Revision: 1.0 $");
+//vtkCxxRevisionMacro(vtkErTracerData, "$Revision: 1.0 $");
 
 vtkStandardNewMacro(vtkErTracer);
-vtkCxxRevisionMacro(vtkErTracer, "$Revision: 1.0 $");
+//vtkCxxRevisionMacro(vtkErTracer, "$Revision: 1.0 $");
 
 vtkErTracer::vtkErTracer(void)
 {

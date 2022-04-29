@@ -26,7 +26,7 @@ class vtkErObjectData : public vtkDataObject, public vtkHostBindableObject
 {
 public:
 	static vtkErObjectData* New();
-	vtkTypeRevisionMacro(vtkErObjectData, vtkDataObject);
+    //vtkTypeRevisionMacro(vtkErObjectData, vtkDataObject);
 	
 protected:
 	vtkErObjectData() {};
@@ -46,7 +46,7 @@ class VTK_ER_EXPORT vtkErObject : public vtkErShape
 {
 public:
 	static vtkErObject* New();
-	vtkTypeRevisionMacro(vtkErObject, vtkErShape);
+    //vtkTypeRevisionMacro(vtkErObject, vtkErShape);
 
 	enum Ports
 	{
