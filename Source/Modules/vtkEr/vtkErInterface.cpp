@@ -16,7 +16,23 @@
 
 #include "vtkErInterface.h"
 
-
+#include <vtkConeSource.h>
+#include <vtkPolyData.h>
+#include <vtkSmartPointer.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkActor.h>
+#include <vtkRenderWindow.h>
+#include <vtkRenderer.h>
+#include <vtkRenderWindowInteractor.h>
+#include <vtkMetaImageReader.h>
+#include <vtkInteractorStyleTrackballCamera.h>
+#include <vtkInteractorStyleTrackball.h>
+#include <vtkPNGReader.h>
+#include <vtkImageCast.h>
+#include <vtkCommand.h>
+#include <vtkImageGaussianSmooth.h>
+#include <vtkWindowToImageFilter.h>
+#include <vtkPNGWriter.h>
 
 void vtkErInterface::ConfigureER(vtkRenderer* Renderer)
 {

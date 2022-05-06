@@ -17,6 +17,7 @@
 #pragma once
 
 #include "statistic.h"
+#include <string.h>
 
 namespace ExposureRender
 {

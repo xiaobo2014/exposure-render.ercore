@@ -17,7 +17,7 @@
 #pragma once
 
 #include "hysteresis.h"
-#include "string"
+#include <string>
 
 namespace ExposureRender
 {

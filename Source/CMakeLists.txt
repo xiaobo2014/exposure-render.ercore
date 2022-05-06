@@ -50,266 +50,41 @@ INCLUDE_DIRECTORIES(
     ${CUDA_TOOLKIT_INCLUDE}
 )
 
+# Find VTK.
+find_package(VTK)
+include(${VTK_USE_FILE})
+
 # Make sure classes are exported
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_EXPORTING")
 
-SOURCE_GROUP("Core" FILES ${vtkErCoreSources})
 
-SET(General
-    utilities.h
-    geometry.h
-    raymarching.h
-    rng.h
-    montecarlo.h
-    ray.h
-    textures.h
-    log.h
-    defines.h
-    camera.h
-    procedural.h
-    matrix.h
-    boundingbox.h
-    exception.h
-    timestamp.h
-    enums.h
-    exposurerender.h
-    exposurerender.cpp
-    range.h
-    tracer.h
-    statistic.h
-    statistics.h
-    volume.h
-    intersection.h
-    object.h
-    texture.h
-    bitmap.h
-    alignment.h
-    transform.h
-    octree.h
-    transport.h
-    volumeproperty.h
-)
+# SOURCE_GROUP("Core" FILES ${vtkErCoreSources})
 
-SOURCE_GROUP("General" FILES ${General})
 
-SET(Buffer
-    buffer.h
-    buffer1d.h
-    buffer2d.h
-    buffer3d.h
-    randomseedbuffer.h
-    randomseedbuffer1d.h
-    randomseedbuffer2d.h
-    randomseedbuffer3d.h
-    randomseedbuffers.h
-    buffers.h
-    cudatexture.h
-    cudatexture1d.h
-    cudatexture2d.h
-    cudatexture3d.h
-    cudatextures.h
-    framebuffer.h
-)
-
-SOURCE_GROUP("Buffer" FILES ${Buffer})
-
-SET(TransferFunction
-    piecewisefunctionnode.h
-    piecewisefunction.h
-    piecewiselinearfunction.h
-    transferfunction.h
-    transferfunction1d.h
-    transferfunction2d.h
-    transferfunctions.h
-)
-
-SOURCE_GROUP("Transfer Function" FILES ${TransferFunction})
-
-SET(Shapes
-    shape.h
-    shapes.h
-    plane.h
-    box.h
-    disk.h
-    ring.h
-    sphere.h
-    cylinder.h
-)
-
-SOURCE_GROUP("Shapes" FILES ${Shapes})
-
-SET(Sample
-    mutate.h
-    rendersample.h
-    surfacesample.h
-    lightsample.h
-    lightingsample.h
-    camerasample.h
-    metrosample.h
-    shadersample.h
-    samples.h
-)
-
-SOURCE_GROUP("Sample" FILES ${Sample})
-
-SET(Shading
-    shader.h
-    phasefunction.h
-    brdf.h
-    fresnel.h
-    lambert.h
-    microfacet.h
-    phasefunction.h
-    blinn.h
-)
-
-SOURCE_GROUP("Shading" FILES ${Shading})
-
-SET(API
-    hostbase.h
-    hosttracer.h
-    hostvolume.h
-    hostobject.h
-    hosttexture.h
-    hostbitmap.h
-)
-
-SOURCE_GROUP("API" FILES ${API})
-
-SET(Filter
-    filter.h
-    mitchell.h
-    gaussian.h
-    sinc.h
-    triangle.h
-)
-
-SOURCE_GROUP("Filter" FILES ${Filter})
-
-SET(Color
-    color.h
-    colorxyzf.h
-    colorxyzaf.h
-    colorrgbf.h
-    colorrgbaf.h
-    colorrgbauc.h
-    kelvin.h
-)
-
-SOURCE_GROUP("Color" FILES ${Color})
-
-SET(Vector
-    vec.h
-    vec2i.h
-    vec2f.h
-    vec3i.h
-    vec3f.h
-    vec4i.h
-    vec4f.h
-    indices.h
-    hysteresis.h
-    vector.h
-)
-
-SOURCE_GROUP("Vector" FILES ${Vector})
-
-SET(Cuda
-    estimate.cuh
-    filtering.cuh
-    tonemap.cuh
-    autofocus.cuh
-    dvr.cuh
-    render.cuh
-    samplecamera.cuh
-    samplelight.cuh
-    sampleshader.cuh
-    intersect.cuh
-    gaussianfilterrgbauc.cuh
-    gaussianfilterxyzaf.cuh
-    blendrgbauc.cuh
-    list.cuh
-    wrapper.cuh
-    macros.cuh
-    core.cu
-)
-
-SOURCE_GROUP("Cuda" FILES ${Cuda})
-
-# Create the ErCore project as a shared library (DLL)
-CUDA_ADD_LIBRARY(ErCore ${General} ${Buffer} ${TransferFunction} ${Shading} ${Shapes} ${Sample} ${API} ${Filter} ${Color} ${Vector} ${Cuda} SHARED)
-# CUDA_ADD_LIBRARY(ErCore ${General} ${Buffer} ${TransferFunction} ${Shading} ${Shapes} ${Sample} ${API} ${Filter} ${Color} ${Vector} SHARED)
-
-IF(ER_VTK)
-
-    IF(NOT VTK_BINARY_DIR)
-        FIND_PACKAGE(VTK)
-        IF(NOT VTK_DIR)
-         MESSAGE(FATAL_ERROR "Please set VTK_DIR.")
-        ENDIF(NOT VTK_DIR)
-        INCLUDE(${VTK_USE_FILE})
-    ENDIF(NOT VTK_BINARY_DIR)
-
-    INCLUDE(CMakeOptions.cmake)
-
-    INCLUDE_DIRECTORIES(
-        ${CMAKE_CURRENT_BINARY_DIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}
+set(ER_MODULE_DIRS "")
+set(ER_MODULE_DIRS ${ER_MODULE_DIRS}
+    "Modules/ErCore/API"
+    "Modules/ErCore/Buffer"
+    "Modules/ErCore/Color"
+    "Modules/ErCore/Cuda"
+    "Modules/ErCore/Filter"
+    "Modules/ErCore/General"
+    "Modules/ErCore/Sample"
+    "Modules/ErCore/Shading"
+    "Modules/ErCore/Shapes"
+    "Modules/ErCore/TransferFunction"
+    "Modules/ErCore/Vector"
+    "Modules/vtkEr"
     )
 
-    # Make sure classes are exported
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_EXPORTING")
+foreach(dir ${ER_MODULE_DIRS})
+    include_directories(${CMAKE_SOURCE_DIR}/${dir} ${CMAKE_BINARY_DIR}/${dir})
+endforeach()
 
-    SET(General
-        vtkErObject.h
-        vtkErObject.cpp
-        vtkErVolume.h
-        vtkErVolume.cpp
-        vtkErTracer.h
-        vtkErTracer.cpp
-        vtkErTexture.h
-        vtkErTexture.cpp
-        vtkErBindable.h
-        vtkErBindable.cpp
-        vtkErCamera.h
-        vtkErCamera.cpp
-        vtkErAlignment.h
-        vtkErAlignment.cpp
-        vtkErBitmap.h
-        vtkErBitmap.cpp
-        vtkErShape.h
-        vtkErShape.cpp
-        vtkErTimerCallback.h
-        vtkErTimerCallback.cpp
-        vtkErVolumeProperty.h
-        vtkErVolumeProperty.cpp
-        vtkErInteractorStyleTrackballCamera.h
-        vtkErInteractorStyleTrackballCamera.cpp
-        vtkErStable.h
-        vtkErStable.cpp
-        vtkErConfigure.h
-        vtkErDll.h
-        vtkErUtilities.h
-        vtkErInterface.h
-        vtkErInterface.cpp
-    )
+add_subdirectory(Modules)
+add_subdirectory(Testing)
+# add_subdirectory(Wrapping)
 
-    SOURCE_GROUP("General" FILES ${General})
 
-    ADD_LIBRARY(vtkEr ${General})
 
-    # Make use of precompiled headers to speed up compilation
-    if (MSVC)
-        set_target_properties(vtkEr PROPERTIES COMPILE_FLAGS "/YuvtkErStable.h")
-        set_source_files_properties(vtkErStable.cpp PROPERTIES COMPILE_FLAGS "/YcvtkErStable.h")
-    endif(MSVC)
 
-    # TARGET_LINK_LIBRARIES(vtkEr vtkCommon vtkRendering vtkGraphics vtkVolumeRendering ErCore OpenGL32.lib)
-    # TARGET_LINK_LIBRARIES(vtkEr ${VTK_LIBRARIES} ErCore OpenGL32.lib)
-    TARGET_LINK_LIBRARIES(vtkEr ${VTK_LIBRARIES} ErCore)
-	
-ENDIF(ER_VTK)
-
-IF(ER_VTK_EXAMPLE)
-    ADD_EXECUTABLE(vtkErExample vtkErExample.cpp)
-    TARGET_LINK_LIBRARIES(vtkErExample vtkEr)
-ENDIF(ER_VTK_EXAMPLE)

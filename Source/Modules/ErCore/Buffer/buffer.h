@@ -17,6 +17,8 @@
 #pragma once
 
 #include "vector.h"
+#include <algorithm>
+#include <memory.h>
 
 #include "wrapper.cuh"
 
