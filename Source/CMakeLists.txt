@@ -288,7 +288,9 @@ IF(ER_VTK)
 		vtkErStable.cpp
 		vtkErConfigure.h
 		vtkErDll.h
-		vtkErUtilities.h
+                vtkErUtilities.h
+                vtkErInterface.h
+                vtkErInterface.cpp
 	)
 
 	SOURCE_GROUP("General" FILES ${General})

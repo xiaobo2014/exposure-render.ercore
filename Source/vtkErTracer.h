@@ -77,6 +77,7 @@ protected:
 
 	virtual void BeforeRender(vtkRenderer* Renderer, vtkVolume* Volume);
 	virtual void Render(vtkRenderer* Renderer, vtkVolume* Volume);
+    void CreateColorImage(vtkImageData* image);
 	virtual void AfterRender(vtkRenderer* Renderer, vtkVolume* Volume);
 
 private:

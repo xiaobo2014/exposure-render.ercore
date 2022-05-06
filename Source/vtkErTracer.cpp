@@ -22,7 +22,9 @@
 #include "vtkErVolume.h"
 #include "vtkErObject.h"
 
-#include "vtkgl.h"
+#include <vtkImageData.h>
+#include <vtkImageMapper.h>
+#include <vtkActor2D.h>
 
 vtkStandardNewMacro(vtkErTracerData);
 //vtkCxxRevisionMacro(vtkErTracerData, "$Revision: 1.0 $");
@@ -35,7 +37,7 @@ vtkErTracer::vtkErTracer(void)
 	this->SetNumberOfInputPorts(2);
 	this->SetNumberOfOutputPorts(0);
 
-	glGenTextures(1, &TextureID);
+    //glGenTextures(1, &TextureID);
 
 	this->ImageBuffer				= NULL;
 	this->LastRenderSize			= Vec2i(0);
@@ -183,11 +185,48 @@ void vtkErTracer::Render(vtkRenderer* Renderer, vtkVolume* Volume)
     ER_CALL(ExposureRender::Render(this->Tracer.ID, this->statistics));
 	ER_CALL(ExposureRender::GetDisplayEstimate(this->Tracer.ID, this->ImageBuffer));
 
-	glDrawPixels(this->LastRenderSize[0], this->LastRenderSize[1], GL_RGBA, GL_UNSIGNED_BYTE, this->ImageBuffer);
+    //create image
+    vtkSmartPointer<vtkImageData> colorImage = vtkSmartPointer<vtkImageData>::New();
+    CreateColorImage(colorImage);
+
+    //create mapper
+    vtkSmartPointer<vtkImageMapper> imageMapper = vtkSmartPointer<vtkImageMapper>::New();
+    imageMapper->SetInputData(colorImage);
+    imageMapper->SetColorWindow(255);
+    imageMapper->SetColorLevel(127.5);
+
+    //create actor
+    vtkSmartPointer<vtkActor2D> imageActor = vtkSmartPointer<vtkActor2D>::New();
+    imageActor->SetMapper(imageMapper);
+
+    //add actor to renderer
+    Renderer->AddActor2D(imageActor);
 
 	this->AfterRender(Renderer, Volume);
 
 	this->InvokeEvent(vtkCommand::VolumeMapperRenderEndEvent,0);
+}
+
+void vtkErTracer::CreateColorImage(vtkImageData* image)
+{
+    image->SetDimensions(this->LastRenderSize[0], this->LastRenderSize[1], 4);
+    image->AllocateScalars(VTK_UNSIGNED_CHAR, 4);
+
+    for(int x = 0; x < this->LastRenderSize[0]; x++)
+    {
+        for(int y=0; y < this->LastRenderSize[1]; y++)
+        {
+            unsigned char* pixel = static_cast<unsigned char*>(image->GetScalarPointer(x,y,0));
+
+            pixel[0] = this->ImageBuffer[x*this->LastRenderSize[1]+y][0];
+            pixel[1] = this->ImageBuffer[x*this->LastRenderSize[1]+y][1];
+            pixel[2] = this->ImageBuffer[x*this->LastRenderSize[1]+y][2];
+            pixel[3] = this->ImageBuffer[x*this->LastRenderSize[1]+y][3];
+
+        }
+    }
+
+    image->Modified();
 }
 
 void vtkErTracer::AfterRender(vtkRenderer* Renderer, vtkVolume* Volume)
