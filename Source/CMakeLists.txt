@@ -295,30 +295,6 @@ IF(ER_VTK)
 
     SOURCE_GROUP("General" FILES ${General})
 
-    # Sources that will be wrapped by python
-    SET(WrapPython
-        vtkErShape.h
-        vtkErShape.cpp
-        vtkErAlignment.h
-        vtkErAlignment.cpp
-        vtkErLight.h
-        vtkErLight.cpp
-        vtkErObject.h
-        vtkErObject.cpp
-        vtkErVolume.h
-        vtkErVolume.cpp
-        vtkErTracer.h
-        vtkErTracer.cpp
-        vtkErTexture.h
-        vtkErTexture.cpp
-        vtkErCamera.h
-        vtkErCamera.cpp
-        vtkErBitmap.h
-        vtkErBitmap.cpp
-        vtkErInteractorStyleTrackballCamera.h
-        vtkErInteractorStyleTrackballCamera.cpp
-    )
-
     ADD_LIBRARY(vtkEr ${General})
 
     # Make use of precompiled headers to speed up compilation
@@ -332,18 +308,6 @@ IF(ER_VTK)
     TARGET_LINK_LIBRARIES(vtkEr ${VTK_LIBRARIES} ErCore)
 	
 ENDIF(ER_VTK)
-
-IF(ER_VTK_PYTHON)
-    IF(VTK_WRAP_PYTHON)
-        INCLUDE_DIRECTORIES("${PYTHON_INCLUDE_PATH}")
-        VTK_WRAP_PYTHON3(vtkErPython vtkErPython_SRCS "${WrapPython}")
-        ADD_LIBRARY(vtkErPythonD ${vtkErPython_SRCS})
-        PYTHON_ADD_MODULE(vtkErPython vtkErPythonInit.cxx)
-		
-        TARGET_LINK_LIBRARIES(vtkErPython vtkErPythonD)
-        TARGET_LINK_LIBRARIES(vtkErPythonD vtkEr vtkCommonPythonD vtkRenderingPythonD vtkGraphicsPythonD vtkVolumeRenderingPythonD)
-    ENDIF(VTK_WRAP_PYTHON)
-ENDIF(ER_VTK_PYTHON)
 
 IF(ER_VTK_EXAMPLE)
     ADD_EXECUTABLE(vtkErExample vtkErExample.cpp)
