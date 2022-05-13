@@ -17,6 +17,10 @@ OPTION(ER_VTK_EXAMPLE "Example project which shows how to use Exposure Render in
 
 PROJECT(ExposureRender)
 
+
+# CMake module path
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake" "${CMAKE_MODULE_PATH}")
+
 # Use CUDA
 FIND_PACKAGE(CUDA)
 
@@ -83,7 +87,7 @@ endforeach()
 
 add_subdirectory(Modules)
 add_subdirectory(Testing)
-# add_subdirectory(Wrapping)
+add_subdirectory(Wrapping)
 
 
 

@@ -24,13 +24,12 @@ using namespace ExposureRender;
 
 int main(int, char *[])
 {
-    //InteractorRender();
+    InteractorRender();
 
     //OffScreenRender();
 
-    std::vector<unsigned char> imageData = vtkErInterface::OffScreenRenderDicom();
-
-    std::cout<<"image data size:"<<imageData.size()<<std::endl;
+    //std::vector<unsigned char> imageData = vtkErInterface::OffScreenRenderDicom();
+    //std::cout<<"image data size:"<<imageData.size()<<std::endl;
 
 	return EXIT_SUCCESS;
 }
@@ -62,7 +61,8 @@ void InteractorRender()
     RenderWindow->SetSize(512, 512);
     RenderWindow->SetWindowName("Exposure Render - VTK wrapping example");
 
-    vtkErInterface::ConfigureER(Renderer);
+    std::string volumePath = "/home/liuxiaobo/DataTransfer/aorta_coronary_chamber_image/CHEN_MEIRONG.mhd";
+    vtkErInterface::ConfigureER(Renderer, volumePath);
 
     Renderer->ResetCamera();
 
@@ -95,7 +95,8 @@ void OffScreenRender()
     RenderWindow->SetSize(512, 512);
     RenderWindow->SetWindowName("Exposure Render - VTK wrapping example");
 
-    vtkErInterface::ConfigureER(Renderer);
+    std::string volumePath = "/home/liuxiaobo/DataTransfer/aorta_coronary_chamber_image/CHEN_MEIRONG.mhd";
+    vtkErInterface::ConfigureER(Renderer, volumePath);
 
     Renderer->ResetCamera();
 

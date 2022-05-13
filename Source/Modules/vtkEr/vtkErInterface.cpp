@@ -34,11 +34,11 @@
 #include <vtkWindowToImageFilter.h>
 #include <vtkPNGWriter.h>
 
-void vtkErInterface::ConfigureER(vtkRenderer* Renderer)
+void vtkErInterface::ConfigureER(vtkRenderer* Renderer, std::string volumePath)
 {
 	vtkSmartPointer<vtkErTracer> Tracer = vtkSmartPointer<vtkErTracer>::New();
 	
-	LoadVolume(Tracer);
+    LoadVolume(Tracer, volumePath);
 	CreateVolumeProperty(Tracer);
 	CreateLighting(Tracer);
 	CreateObjects(Tracer);
@@ -108,15 +108,15 @@ void vtkErInterface::CreateVolumeProperty(vtkErTracer* Tracer)
 	Tracer->SetVolumeProperty(VolumeProperty);
 }
 
-void vtkErInterface::LoadVolume(vtkErTracer* Tracer)
+void vtkErInterface::LoadVolume(vtkErTracer* Tracer, std::string volumePath)
 {
 	vtkSmartPointer<vtkMetaImageReader> Reader	= vtkSmartPointer<vtkMetaImageReader>::New();
 	
-	Reader->SetFileName(gVolumeFile);
+    Reader->SetFileName(volumePath.c_str());
 	
-	if (Reader->CanReadFile(gVolumeFile) == 0)
+    if (Reader->CanReadFile(volumePath.c_str()) == 0)
 	{
-		printf("Can't read %s, aborting!\n", gVolumeFile);
+        printf("Can't read %s, aborting!\n", volumePath.c_str());
 		exit(EXIT_FAILURE);
 	}
 
@@ -457,7 +457,8 @@ std::vector<unsigned char> vtkErInterface::OffScreenRenderDicom()
 
     RenderWindow->SetWindowName("Exposure Render - VTK wrapping example");
 
-    vtkErInterface::ConfigureER(Renderer);
+    std::string volumePath = "/home/liuxiaobo/DataTransfer/aorta_coronary_chamber_image/CHEN_MEIRONG.mhd";
+    vtkErInterface::ConfigureER(Renderer, volumePath);
 
     Renderer->ResetCamera();
 

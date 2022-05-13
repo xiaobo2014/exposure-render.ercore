@@ -36,7 +36,7 @@ class vtkRenderer;
 //char gVolumeFile[] = "D:\\DataTransfer\\aorta_coronary_chamber_image\\CHEN_MEIRONG.mhd";
 
 
-char gVolumeFile[] = "/home/liuxiaobo/DataTransfer/aorta_coronary_chamber_image/CHEN_MEIRONG.mhd";
+//std::string gVolumeFile = "/home/liuxiaobo/DataTransfer/aorta_coronary_chamber_image/CHEN_MEIRONG.mhd";
 
 //#define BACK_PLANE_ON
 #define KEY_LIGHT_ON
@@ -51,14 +51,14 @@ char gVolumeFile[] = "/home/liuxiaobo/DataTransfer/aorta_coronary_chamber_image/
 	char gEnvironmentBitmap[] = "C:\\Dropbox\\Work\\Data\\Bitmaps\\environment.png";
 #endif
 
-using namespace ExposureRender;
+//using namespace ExposureRender;
 
 class vtkErInterface
 {
 public:
 
-    static void ConfigureER(vtkRenderer* Renderer);
-    static void LoadVolume(vtkErTracer* Tracer);
+    static void ConfigureER(vtkRenderer* Renderer, std::string volumePath);
+    static void LoadVolume(vtkErTracer* Tracer, std::string volumePath);
     static void CreateCamera(vtkRenderer* Renderer);
     static void CreateVolumeProperty(vtkErTracer* Tracer);
     static void CreateLighting(vtkErTracer* Tracer);

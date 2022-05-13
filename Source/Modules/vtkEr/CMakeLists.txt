@@ -48,7 +48,7 @@ IF(ER_VTK)
 
     SOURCE_GROUP("General" FILES ${General})
 
-    ADD_LIBRARY(vtkEr ${General})
+    ADD_LIBRARY(vtkEr ${RX_LIBRARY_TYPE} ${General})
 
     # Make use of precompiled headers to speed up compilation
     if (MSVC)
